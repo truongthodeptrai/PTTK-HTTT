@@ -11,3 +11,22 @@ export default function StayManagement() {
     </div>
   );
 }
+
+/*
+7
+Quản lý đặt cọc
+Nhân viên kế toán
+Theo dõi đơn PENDING. Xác nhận khi nhận bill thanh toán (Chuyển sang WAITING_CONFIRM). 
+8
+Quản lý lưu trú
+Nhân viên kế toán
+Lập hợp đồng dựa trên đơn cọc thành công. Ghi nhận kỳ thanh toán (tháng/quý). 
+9
+Thanh toán và hoàn cọc
+Nhân viên kế toán
+Logic hoàn tiền: Áp dụng tỷ lệ 80% - 70% - 50% - 100% dựa trên thời gian thực tế khách ở. 
+10
+Công nợ và phạt
+Nhân viên kế toán
+Tính toán tiền điện, nước, hư hỏng tài sản và các khoản phạt vi phạm nội quy để trừ vào cọc. 
+*/
