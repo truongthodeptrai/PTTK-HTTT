@@ -37,8 +37,3 @@ export default function AccountantLayout() {
     </div>
   );
 }
-        </div>
-      </div>
-    </div>
-  );
-}
