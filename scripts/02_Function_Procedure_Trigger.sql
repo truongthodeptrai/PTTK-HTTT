@@ -18,11 +18,10 @@ BEGIN
 END
 GO
 
--- 2. Procedure tạo tài khoản
 CREATE PROCEDURE SP_TaoTaiKhoan
 (
     @TenTaiKhoan NVARCHAR(100),
-    @MatKhau NVARCHAR(200),
+    @MatKhauHash NVARCHAR(255),
     @MaNhanVien INT
 )
 
@@ -30,7 +29,11 @@ AS
 BEGIN
 
     SET NOCOUNT ON;
+
+
+
     -- Kiểm tra username tồn tại
+
     IF EXISTS
     (
         SELECT 1
@@ -47,6 +50,9 @@ BEGIN
 
         RETURN
     END
+
+
+
     -- Kiểm tra nhân viên tồn tại
 
     IF NOT EXISTS
@@ -65,7 +71,11 @@ BEGIN
 
         RETURN
     END
+
+
+
     -- Kiểm tra nhân viên đã có tài khoản
+
     IF EXISTS
     (
         SELECT 1
@@ -82,28 +92,27 @@ BEGIN
 
         RETURN
     END
-    DECLARE @Salt UNIQUEIDENTIFIER =
-        NEWID()
+
+
+
     INSERT INTO TaiKhoan
     (
         TenTaiKhoan,
         MatKhauHash,
-        Salt,
         MaNhanVien
     )
+
     VALUES
     (
         @TenTaiKhoan,
-
-        dbo.FN_HashPassword(
-            @MatKhau,
-            @Salt
-        ),
-        @Salt,
+        @MatKhauHash,
         @MaNhanVien
     )
 
+
+
     PRINT N'Tạo tài khoản thành công'
+
 END
 GO
 

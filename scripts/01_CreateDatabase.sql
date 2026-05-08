@@ -49,11 +49,11 @@ CREATE TABLE TaiKhoan
 (
     MaTaiKhoan INT IDENTITY(1,1) PRIMARY KEY,
     TenTaiKhoan NVARCHAR(100) UNIQUE NOT NULL,
-    MatKhauHash VARBINARY(256) NOT NULL,
-    Salt UNIQUEIDENTIFIER NOT NULL,
+    MatKhauHash NVARCHAR(255) NOT NULL,
     MaNhanVien INT UNIQUE NOT NULL,
+
     FOREIGN KEY(MaNhanVien) REFERENCES NhanVien(MaNhanVien)
-);
+)
 GO
 
 -- Loại phòng

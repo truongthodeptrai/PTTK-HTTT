@@ -26,19 +26,19 @@ GO
 -- Sales
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'sale01',
-    @MatKhau = '123456',
+    @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
     @MaNhanVien = 1
 GO
 -- Accountant
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'account01',
-    @MatKhau = '123456',
+    @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
     @MaNhanVien = 2
 GO
 -- Manager
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'manager01',
-    @MatKhau = '123456',
+    @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
     @MaNhanVien = 3
 GO
 GO

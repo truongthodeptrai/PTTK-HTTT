@@ -1,11 +1,11 @@
-const crypto = require('crypto')
+const bcrypt = require('bcrypt')
 
-function hashPassword(password, salt) {
-
-    return crypto
-        .createHash('sha256')
-        .update(password + salt)
-        .digest()
+async function hashPassword(password) {
+    const saltRounds = 10
+    return await bcrypt.hash(
+        password,
+        saltRounds
+    )
 }
 
 module.exports = hashPassword
