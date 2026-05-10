@@ -80,7 +80,7 @@ export default function DebtSection() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Công nợ & Phạt</h2>
         <div className="text-sm text-gray-600">
           Tổng công nợ: <span className="font-bold text-red-600">{formatCurrency(totalDebt)}</span>
@@ -92,8 +92,8 @@ export default function DebtSection() {
       ) : (
         <div className="space-y-6">
           {/* Debt Stats */}
-          <div className="grid grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-3xl p-6 border border-red-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+            <div className="bg-linear-to-br from-red-50 to-red-100 rounded-3xl p-6 border border-red-200">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-red-600 text-sm font-medium">Quá hạn</p>
@@ -105,7 +105,7 @@ export default function DebtSection() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-6 border border-orange-200">
+            <div className="bg-linear-to-br from-orange-50 to-orange-100 rounded-3xl p-6 border border-orange-200">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-orange-600 text-sm font-medium">Chờ thanh toán</p>
@@ -117,7 +117,7 @@ export default function DebtSection() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-3xl p-6 border border-emerald-200">
+            <div className="bg-linear-to-br from-emerald-50 to-emerald-100 rounded-3xl p-6 border border-emerald-200">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-emerald-600 text-sm font-medium">Đã thanh toán</p>
@@ -131,11 +131,11 @@ export default function DebtSection() {
           </div>
 
           {/* Debt Table */}
-          <div className="bg-white rounded-3xl shadow overflow-hidden">
+          <div className="bg-white rounded-3xl shadow overflow-x-auto">
             {debts.length === 0 ? (
               renderEmptyState('Không có công nợ nào')
             ) : (
-              <table className="w-full">
+              <table className="min-w-[920px] w-full">
                 <thead className="bg-gray-50 sticky top-0">
                   <tr>
                     <th className="text-left py-5 px-6 font-semibold">Khách hàng</th>

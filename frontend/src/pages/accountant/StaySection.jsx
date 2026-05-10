@@ -42,16 +42,16 @@ export default function StaySection() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Danh sách Lưu trú</h2>
         <div className="text-sm text-gray-600">Tổng: {stays.length} hợp đồng</div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow overflow-hidden">
+      <div className="bg-white rounded-3xl shadow overflow-x-auto">
         {stays.length === 0 ? (
           renderEmptyState('Không có hợp đồng lưu trú nào')
         ) : (
-          <table className="w-full">
+          <table className="min-w-[920px] w-full">
             <thead className="bg-gray-50 sticky top-0">
               <tr>
                 <th className="text-left py-5 px-6 font-semibold">Mã hợp đồng</th>

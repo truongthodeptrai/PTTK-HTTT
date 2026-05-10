@@ -11,14 +11,14 @@ export default function Navbar({ title }) {
   };
 
   return (
-    <div className="bg-white border-b px-8 py-5 flex justify-between items-center sticky top-0 z-10">
-      <h1 className="text-2xl font-semibold text-gray-800">{title}</h1>
+    <header className="bg-white border-b px-4 py-4 sm:px-6 lg:px-8 lg:py-5 flex justify-between items-center gap-4 sticky top-0 z-10">
+      <h1 className="min-w-0 truncate text-xl sm:text-2xl font-semibold text-gray-800">{title}</h1>
       <button
         onClick={handleLogout}
-        className="flex items-center gap-2 text-red-600 hover:text-red-700 transition"
+        className="shrink-0 flex items-center gap-2 text-red-600 hover:text-red-700 transition"
       >
         <i className="fas fa-sign-out-alt"></i> Đăng xuất
       </button>
-    </div>
+    </header>
   );
 }

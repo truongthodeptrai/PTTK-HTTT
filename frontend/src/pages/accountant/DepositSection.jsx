@@ -76,7 +76,7 @@ export default function DepositSection() {
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Danh sách Đặt cọc</h2>
         <button className="px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
           <i className="fas fa-filter"></i> Lọc
@@ -86,11 +86,11 @@ export default function DepositSection() {
       {loading ? (
         renderLoadingState()
       ) : (
-        <div className="bg-white rounded-3xl shadow overflow-hidden">
+        <div className="bg-white rounded-3xl shadow overflow-x-auto">
           {bookings.length === 0 ? (
             renderEmptyState('Không có đặt cọc nào')
           ) : (
-            <table className="w-full">
+            <table className="min-w-[860px] w-full">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
                   <th className="text-left py-5 px-6 font-semibold">Mã Đặt cọc</th>
