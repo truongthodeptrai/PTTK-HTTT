@@ -157,7 +157,7 @@ export default function DebtSection() {
                             ? 'bg-blue-100 text-blue-700' 
                             : 'bg-red-100 text-red-700'
                         }`}>
-                          {debt.type === 'utilities' ? '💡 Tiền ứ' : '⚠️ Phạt'}
+                          {debt.type === 'utilities' ? '💡 Tiền nước' : '⚠️ Phạt'}
                         </span>
                       </td>
                       <td className="py-5 px-6">{debt.description}</td>
