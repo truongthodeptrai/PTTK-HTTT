@@ -1,48 +1,64 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const UserModel = require('../models/User.model');
+const config = require('../config');
 
-// Mock users database - Replace with real DB
-const users = {
-  'sale01': { id: 1, username: 'sale01', password: '123456', role: 'sales', name: 'Nguyễn Văn Sale' },
-  'accountant01': { id: 2, username: 'accountant01', password: '123456', role: 'accountant', name: 'Lê Thị Kế Toán' },
-  'manager01': { id: 3, username: 'manager01', password: '123456', role: 'manager', name: 'Trần Quản Lý' }
-};
+function toPublicUser(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+    name: user.name,
+    branchId: user.branchId,
+    branchName: user.branchName,
+  };
+}
+
+async function isPasswordValid(password, passwordHash) {
+  if (!passwordHash) return false;
+
+  const looksHashed = passwordHash.startsWith('$2a$')
+    || passwordHash.startsWith('$2b$')
+    || passwordHash.startsWith('$2y$');
+
+  if (!looksHashed) {
+    return password === passwordHash;
+  }
+
+  return bcrypt.compare(password, passwordHash);
+}
 
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Username and password required' 
+      return res.status(400).json({
+        success: false,
+        message: 'Username and password required',
       });
     }
 
-    const user = users[username];
+    const user = await UserModel.findByUsername(username);
+    const passwordValid = user && await isPasswordValid(password, user.passwordHash);
 
-    if (!user || user.password !== password) {
-      return res.status(401).json({ 
-        success: false, 
-        message: 'Invalid credentials' 
+    if (!passwordValid) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials',
       });
     }
 
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
-      process.env.JWT_SECRET || 'your-secret-key',
+      config.jwtSecret || 'your-secret-key',
       { expiresIn: '24h' }
     );
 
     res.json({
       success: true,
       token,
-      user: {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        name: user.name
-      }
+      user: toPublicUser(user),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -53,17 +69,17 @@ exports.logout = (req, res) => {
   res.json({ success: true, message: 'Logged out successfully' });
 };
 
-exports.getCurrentUser = (req, res) => {
+exports.getCurrentUser = async (req, res) => {
   try {
-    const user = users[req.user.username];
+    const user = await UserModel.findById(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
     res.json({
       success: true,
-      user: {
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        name: user.name
-      }
+      user: toPublicUser(user),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
