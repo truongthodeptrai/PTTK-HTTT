@@ -1,20 +1,31 @@
 import React from 'react';
 import { Outlet, Link } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import SidebarAccountant from './SidebarAccountant';
+import SidebarSales from './SidebarSales';
+
 
 function Layout({ userRole }) {
+  let SidebarComponent;
+  if (userRole === 'KE_TOAN') SidebarComponent = SidebarAccountant;
+  if (userRole === 'SALE') SidebarComponent = SidebarSales;
+  // Thêm các role khác nếu cần
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f6f8fa' }}>
-      {/* Sidebar cố định chiều cao, cuộn nếu dài */}
-      <Sidebar role={userRole} />
+    <div className="flex min-h-screen bg-[#f6f8fa]">
+      {/* Sidebar */}
+      <SidebarComponent />
       {/* Main content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <div className="flex flex-col flex-1 min-w-0">
         {/* Header nổi bật */}
-        <header style={{ padding: '18px 32px', background: 'linear-gradient(90deg, #2196f3 60%, #64b5f6 100%)', color: '#fff', borderBottom: '2px solid #1976d2', fontWeight: 600, letterSpacing: 0.5 }}>
-          <h2 style={{ margin: 0, fontSize: 26 }}>Homestay Dashboard <span style={{ fontWeight: 400, fontSize: 18, marginLeft: 18 }}>Xin chào, <span style={{ color: '#ffe082' }}>{userRole}</span></span></h2>
+        <header className="px-8 py-5 bg-gradient-to-r from-blue-600 to-blue-300 text-white border-b-2 border-blue-800 font-semibold">
+          <h2 className="m-0 text-2xl">
+            Dashboard
+            <span className="font-normal text-lg ml-4">
+              Xin chào, <span className="text-yellow-300">{userRole}</span>
+            </span>
+          </h2>
         </header>
         {/* Main content area */}
-        <main style={{ padding: '32px 36px', flex: 1, background: '#f6f8fa', minHeight: 0, overflow: 'auto' }}>
+        <main className="flex-1 p-8 bg-[#f6f8fa] overflow-auto min-h-0">
           <Outlet />
         </main>
       </div>

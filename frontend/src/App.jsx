@@ -10,7 +10,7 @@ const TrangKhachHang = () => <div>Màn hình: Quản lý Khách hàng</div>;
 
 function App() {
   // Giả sử người đang đăng nhập là Kế toán. Bạn có thể đổi thành 'SALE' để test thử.
-  const currentUserRole = 'KE_TOAN'; // Hoặc 'SALE'
+  const currentUserRole = 'SALE'; // Hoặc 'SALE'
 
   return (
     <BrowserRouter>
@@ -19,7 +19,8 @@ function App() {
         <Route path="/" element={<Layout userRole={currentUserRole} />}>
           
           {/* Các Route con: Sẽ được hiển thị bên trong Layout */}
-          <Route path="so-do-phong" element={<TrangSoDoPhong />} />
+            <Route path="tra-cuu-phong" element={<TrangSoDoPhong />} />
+            {/* <Route path="quan-ly-khach-hang" element={<TrangKhachHang />} /> */}
           
           {currentUserRole === 'KE_TOAN' && (
             <Route path="phieu-dat-coc" element={<TrangGiaoDichDatCoc />} />
