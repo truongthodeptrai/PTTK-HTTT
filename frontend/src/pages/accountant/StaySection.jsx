@@ -75,7 +75,7 @@ export default function StaySection() {
                   </td>
                   <td className="py-5 px-6 text-center">{getStatusBadge(stay.status)}</td>
                   <td className="py-5 px-6 text-center">
-                    <button className="text-blue-600 hover:text-blue-700 text-sm">
+                    <button className="cursor-pointer text-blue-600 hover:text-blue-700 text-sm">
                       <i className="fas fa-eye"></i> Chi tiết
                     </button>
                   </td>

@@ -15,7 +15,7 @@ export default function Navbar({ title }) {
       <h1 className="min-w-0 truncate text-xl sm:text-2xl font-semibold text-gray-800">{title}</h1>
       <button
         onClick={handleLogout}
-        className="shrink-0 flex items-center gap-2 text-red-600 hover:text-red-700 transition"
+        className="cursor-pointer shrink-0 flex items-center gap-2 text-red-600 hover:text-red-700 transition"
       >
         <i className="fas fa-sign-out-alt"></i> Đăng xuất
       </button>

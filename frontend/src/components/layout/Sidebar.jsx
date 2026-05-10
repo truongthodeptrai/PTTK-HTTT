@@ -51,7 +51,7 @@ export default function Sidebar({ onNavigate, activeSection, roleConfig }) {
           </div>
           <button
             onClick={handleLogout}
-            className="text-red-600 hover:text-red-700 text-sm"
+            className="cursor-pointer text-red-600 hover:text-red-700 text-sm"
             title="Đăng xuất"
           >
             <i className="fas fa-sign-out-alt"></i>

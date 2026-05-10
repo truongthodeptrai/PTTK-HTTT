@@ -170,7 +170,7 @@ export default function DebtSection() {
                         {debt.status !== 'paid' ? (
                           <button
                             onClick={() => handleMarkDebtAsPaid(debt.id)}
-                            className="px-4 py-2 bg-emerald-600 text-white text-sm rounded-xl hover:bg-emerald-700 transition"
+                            className="cursor-pointer px-4 py-2 bg-emerald-600 text-white text-sm rounded-xl hover:bg-emerald-700 transition"
                           >
                             <i className="fas fa-check mr-1"></i>Thu tiền
                           </button>

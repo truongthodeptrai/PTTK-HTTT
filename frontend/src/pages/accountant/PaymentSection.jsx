@@ -82,7 +82,7 @@ export default function PaymentSection() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Thanh toán & Hoàn cọc</h2>
-        <button className="px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
+        <button className="cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
           <i className="fas fa-plus"></i> Tạo thanh toán
         </button>
       </div>
@@ -164,7 +164,7 @@ export default function PaymentSection() {
                         {payment.status === 'pending' ? (
                           <button
                             onClick={() => handleProcessPayment(payment.id)}
-                            className="px-4 py-2 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-700 transition"
+                            className="cursor-pointer px-4 py-2 bg-blue-600 text-white text-sm rounded-xl hover:bg-blue-700 transition"
                           >
                             <i className="fas fa-check mr-1"></i>Xác nhận
                           </button>

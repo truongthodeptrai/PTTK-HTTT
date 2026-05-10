@@ -78,7 +78,8 @@ export default function DepositSection() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Danh sách Đặt cọc</h2>
-        <button className="px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
+        <button onClick={() => alert('Chức năng lọc nâng cao')}  
+        className="cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
           <i className="fas fa-filter"></i> Lọc
         </button>
       </div>
@@ -115,7 +116,7 @@ export default function DepositSection() {
                       {booking.status === 'pending' ? (
                         <button
                           onClick={() => handleApproveBooking(booking.id)}
-                          className="px-4 py-2 bg-emerald-600 text-white text-sm rounded-xl hover:bg-emerald-700 transition"
+                          className="cursor-pointer px-4 py-2 bg-emerald-600 text-white text-sm rounded-xl hover:bg-emerald-700 transition"
                         >
                           <i className="fas fa-check mr-2"></i>Duyệt
                         </button>
