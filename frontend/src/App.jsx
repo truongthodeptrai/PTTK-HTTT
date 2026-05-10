@@ -13,7 +13,6 @@ function App() {
   const currentUserRole = 'SALE'; // Hoặc 'SALE'
 
   return (
-    <BrowserRouter>
       <Routes>
         {/* Route cha: Sử dụng Layout làm khung hiển thị chung */}
         <Route path="/" element={<Layout userRole={currentUserRole} />}>
@@ -32,7 +31,6 @@ function App() {
 
         </Route>
       </Routes>
-    </BrowserRouter>
   );
 }
 
