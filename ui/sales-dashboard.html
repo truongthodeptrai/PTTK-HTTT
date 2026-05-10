@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhân viên Kinh doanh</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:       #1565C0;
+      --blue-mid:   #1976D2;
+      --blue-light: #42A5F5;
+      --blue-pale:  #E3F2FD;
+      --sidebar-w:  220px;
+      --header-h:   56px;
+      --white:      #ffffff;
+      --gray-1:     #f4f7fb;
+      --gray-2:     #e8edf5;
+      --gray-3:     #c5cfe0;
+      --text-dark:  #0d1b2e;
+      --text-mid:   #3a4e6b;
+      --text-light: #7a90ad;
+      --green:      #22c55e;
+      --yellow:     #f59e0b;
+      --red:        #ef4444;
+      --radius:     12px;
+      --shadow:     0 2px 12px rgba(21,101,192,.10);
+      --shadow-md:  0 4px 24px rgba(21,101,192,.15);
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background: var(--gray-1);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--blue);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 20px 20px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+    }
+    .sidebar-logo h1 {
+      color: white;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -.3px;
+      line-height: 1.3;
+    }
+    .sidebar-logo p {
+      color: rgba(255,255,255,.55);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+    .sidebar-nav {
+      padding: 12px 10px;
+      flex: 1;
+    }
+    .nav-label {
+      color: rgba(255,255,255,.4);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 8px 10px 4px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: rgba(255,255,255,.75);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      margin-bottom: 2px;
+    }
+    .nav-item i { font-size: 17px; flex-shrink: 0; }
+    .nav-item:hover { background: rgba(255,255,255,.12); color: white; }
+    .nav-item.active { background: rgba(255,255,255,.18); color: white; font-weight: 600; }
+    .sidebar-footer {
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .avatar-sm {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(255,255,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; flex-shrink: 0;
+    }
+    .sidebar-footer-info { flex: 1; min-width: 0; }
+    .sidebar-footer-info p { color: white; font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-footer-info span { color: rgba(255,255,255,.5); font-size: 10.5px; }
+
+    /* ── MAIN AREA ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      height: var(--header-h);
+      background: var(--blue);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 12px;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .header-title { color: white; font-size: 15px; font-weight: 700; flex: 1; }
+    .header-greeting { color: rgba(255,255,255,.7); font-size: 13px; }
+
+    /* ── PAGE CONTENT ── */
+    .page { display: none; padding: 24px; flex: 1; }
+    .page.active { display: block; }
+
+    /* ── ROOM GRID PAGE ── */
+    .toolbar {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;
+    }
+    .search-wrap {
+      background: white; border-radius: 999px;
+      padding: 8px 16px; display: flex; align-items: center; gap: 8px;
+      font-size: 13px; box-shadow: var(--shadow);
+    }
+    .search-wrap i { color: var(--text-light); }
+    .search-wrap input { border: none; outline: none; font-size: 13px; font-family: inherit; width: 130px; }
+    .dropdown-wrap { position: relative; }
+    .filter-btn {
+      background: white; border: none; border-radius: 999px;
+      padding: 8px 16px; font-size: 13px; font-weight: 500;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      color: var(--text-dark); box-shadow: var(--shadow); white-space: nowrap;
+      font-family: inherit; transition: background .15s;
+    }
+    .filter-btn:hover { background: var(--blue-pale); }
+    .filter-btn.active { background: var(--blue); color: white; }
+    .filter-btn.active i { color: white; }
+    .dropdown-menu {
+      display: none; position: absolute; top: calc(100% + 6px); left: 0;
+      background: white; border-radius: 10px; box-shadow: var(--shadow-md);
+      z-index: 50; min-width: 190px; overflow: hidden;
+    }
+    .dropdown-menu.open { display: block; }
+    .dropdown-item {
+      padding: 10px 16px; font-size: 13px; cursor: pointer;
+      color: var(--text-dark); border-bottom: 1px solid var(--gray-2);
+      transition: background .12s; font-family: inherit;
+    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: var(--blue-pale); }
+    .dropdown-item.selected { background: var(--blue-pale); color: var(--blue); font-weight: 600; }
+
+    /* Room cards */
+    .room-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .room-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 18px 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform .18s, box-shadow .18s;
+      border: 2px solid transparent;
+    }
+    .room-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--blue-light);
+    }
+    .room-card-header {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 12px;
+    }
+    .dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .dot-green  { background: var(--green); }
+    .dot-red    { background: var(--red); }
+    .dot-yellow { background: var(--yellow); }
+    .room-card-name { font-size: 15px; font-weight: 700; color: var(--blue); }
+    .room-card-info { font-size: 12.5px; color: var(--text-mid); line-height: 1.9; }
+    .room-card-info span { display: block; }
+
+    /* Pagination */
+    .pagination {
+      display: flex; justify-content: center; align-items: center;
+      gap: 6px; margin-top: 24px; flex-wrap: wrap;
+    }
+    .page-btn {
+      width: 36px; height: 36px; border-radius: 8px; border: none;
+      background: white; font-size: 13px; font-weight: 600;
+      cursor: pointer; color: var(--text-dark);
+      box-shadow: var(--shadow); transition: background .12s, color .12s;
+      display: flex; align-items: center; justify-content: center;
+      font-family: inherit;
+    }
+    .page-btn:hover { background: var(--blue-pale); color: var(--blue); }
+    .page-btn.active { background: var(--blue); color: white; }
+    .page-btn:disabled { opacity: .4; cursor: default; }
+    .page-ellipsis { color: var(--text-light); font-size: 13px; padding: 0 4px; }
+
+    /* Empty */
+    .empty-state {
+      grid-column: 1/-1; text-align: center;
+      padding: 3rem; color: var(--text-light); font-size: 14px;
+    }
+
+    /* ── ROOM DETAIL PANEL ── */
+    .detail-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,27,46,.45); z-index: 200;
+      align-items: center; justify-content: center;
+    }
+    .detail-overlay.open { display: flex; }
+    .detail-panel {
+      background: white; border-radius: 16px;
+      width: 680px; max-width: 95vw; max-height: 90vh;
+      overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,.2);
+    }
+    .detail-header {
+      background: var(--blue); padding: 18px 22px;
+      display: flex; align-items: center; gap: 12px;
+      border-radius: 16px 16px 0 0;
+    }
+    .detail-header h2 { color: white; font-size: 16px; font-weight: 700; flex: 1; }
+    .detail-close {
+      background: rgba(255,255,255,.2); border: none;
+      border-radius: 8px; width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; cursor: pointer; font-size: 16px;
+      transition: background .15s;
+    }
+    .detail-close:hover { background: rgba(255,255,255,.35); }
+    .detail-body { padding: 20px 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .detail-section h3 { font-size: 13px; font-weight: 700; color: var(--blue); margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+    .detail-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--gray-2); font-size: 13px; }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { color: var(--text-light); }
+    .detail-value { font-weight: 600; color: var(--text-dark); }
+    .bed-card {
+      background: var(--gray-1); border-radius: 8px;
+      padding: 10px 12px; margin-bottom: 8px;
+    }
+    .bed-card:last-child { margin-bottom: 0; }
+    .bed-card-title { font-size: 12.5px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+    .bed-card-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mid); }
+
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; color: white;
+    }
+    .badge-green  { background: var(--green); }
+    .badge-red    { background: var(--red); }
+    .badge-yellow { background: var(--yellow); color: #fff; }
+    .badge-blue   { background: var(--blue); }
+    .badge-gray   { background: var(--gray-3); color: var(--text-mid); }
+
+    /* ── DAT COC PAGE ── */
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+    }
+    .page-header h2 { font-size: 18px; font-weight: 800; color: var(--text-dark); }
+    .btn-primary {
+      background: var(--blue); color: white; border: none;
+      border-radius: 999px; padding: 9px 20px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      display: flex; align-items: center; gap: 7px;
+      font-family: inherit; transition: background .15s;
+    }
+    .btn-primary:hover { background: #0d47a1; }
+
+    /* Summary cards */
+    .summary-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px; margin-bottom: 22px;
+    }
+    .summary-card {
+      background: white; border-radius: var(--radius);
+      padding: 16px 18px; box-shadow: var(--shadow);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .summary-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .summary-icon.blue   { background: var(--blue-pale); color: var(--blue); }
+    .summary-icon.green  { background: #dcfce7; color: #16a34a; }
+    .summary-icon.yellow { background: #fef9c3; color: #a16207; }
+    .summary-info p { font-size: 11px; color: var(--text-light); font-weight: 500; }
+    .summary-info h3 { font-size: 20px; font-weight: 800; color: var(--text-dark); }
+
+    /* Deposit table */
+    .table-card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .table-toolbar { padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--gray-2); flex-wrap: wrap; }
+    .table-search {
+      background: var(--gray-1); border-radius: 999px;
+      padding: 7px 14px; display: flex; align-items: center; gap: 8px;
+      font-size: 13px;
+    }
+    .table-search i { color: var(--text-light); }
+    .table-search input { border: none; outline: none; background: transparent; font-size: 13px; font-family: inherit; width: 160px; }
+    .status-tabs { display: flex; gap: 6px; }
+    .status-tab {
+      padding: 5px 14px; border-radius: 999px; font-size: 12px; font-weight: 600;
+      cursor: pointer; border: none; font-family: inherit; transition: background .12s, color .12s;
+      background: var(--gray-2); color: var(--text-mid);
+    }
+    .status-tab.active { background: var(--blue); color: white; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead { background: var(--gray-1); }
+    thead th { padding: 11px 14px; text-align: left; font-weight: 700; color: var(--text-mid); white-space: nowrap; font-size: 12px; text-transform: uppercase; letter-spacing: .4px; }
+    tbody tr { border-bottom: 1px solid var(--gray-2); transition: background .1s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-1); }
+    tbody td { padding: 11px 14px; color: var(--text-dark); vertical-align: middle; }
+    .action-btn {
+      background: none; border: none; cursor: pointer; padding: 5px 7px;
+      border-radius: 6px; font-size: 15px; color: var(--text-mid);
+      transition: background .12s; font-family: inherit;
+    }
+    .action-btn:hover { background: var(--gray-2); color: var(--text-dark); }
+    .empty-table { text-align: center; padding: 2.5rem; color: var(--text-light); font-style: italic; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,27,46,.45); z-index: 300;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 14px;
+      padding: 24px; width: 400px; max-width: 94vw;
+      box-shadow: 0 8px 40px rgba(0,0,0,.2);
+    }
+    .modal h3 { font-size: 15px; font-weight: 800; margin-bottom: 18px; color: var(--text-dark); display: flex; align-items: center; gap: 8px; }
+    .field { margin-bottom: 13px; }
+    .field label { display: block; font-size: 12px; font-weight: 700; color: var(--text-mid); margin-bottom: 5px; text-transform: uppercase; letter-spacing: .4px; }
+    .field input, .field select {
+      width: 100%; padding: 9px 12px; border: 1.5px solid var(--gray-3);
+      border-radius: 8px; font-size: 13px; font-family: inherit;
+      outline: none; transition: border .15s; color: var(--text-dark);
+    }
+    .field input:focus, .field select:focus { border-color: var(--blue); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .btn-save {
+      flex: 1; padding: 10px; background: var(--blue); color: white;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; font-family: inherit; transition: background .15s;
+    }
+    .btn-save:hover { background: #0d47a1; }
+    .btn-cancel {
+      flex: 1; padding: 10px; background: var(--gray-1); color: var(--text-mid);
+      border: 1.5px solid var(--gray-3); border-radius: 8px; font-size: 13px;
+      cursor: pointer; font-family: inherit;
+    }
+    .btn-cancel:hover { background: var(--gray-2); }
+
+    /* ── CU TRU LIST ── */
+    .ct-stats {
+      background: rgba(21,101,192,.08); border-radius: 999px;
+      padding: 6px 16px; font-size: 12px; font-weight: 600;
+      color: var(--blue); display: flex; align-items: center; gap: 6px;
+    }
+    .ct-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .ct-room-block { background: white; border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+
+    .ct-room-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 18px; cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: background .12s;
+    }
+    .ct-room-header:hover { background: var(--blue-pale); }
+    .ct-room-header.open { border-bottom-color: var(--gray-2); }
+
+    .ct-room-name { font-size: 14px; font-weight: 700; color: var(--blue); flex: 1; }
+    .ct-room-meta { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--text-mid); }
+    .ct-room-meta span { display: flex; align-items: center; gap: 4px; }
+    .ct-chevron { font-size: 15px; color: var(--text-light); transition: transform .2s; }
+    .ct-chevron.open { transform: rotate(180deg); }
+
+    .ct-tenant-list { display: none; }
+    .ct-tenant-list.open { display: block; }
+
+    .ct-tenant-row {
+      display: flex; align-items: center; gap: 0;
+      padding: 10px 18px; border-bottom: 1px solid var(--gray-2);
+      font-size: 13px; transition: background .1s;
+    }
+    .ct-tenant-row:last-child { border-bottom: none; }
+    .ct-tenant-row:hover { background: var(--gray-1); }
+
+    .ct-tenant-bed { min-width: 90px; color: var(--text-light); font-size: 12px; }
+    .ct-tenant-name { flex: 1; font-weight: 600; color: var(--text-dark); }
+    .ct-tenant-days {
+      font-size: 12px; color: var(--text-mid);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .days-pill {
+      display: inline-block; padding: 2px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; color: white;
+      background: var(--blue);
+    }
+    .days-pill.warn  { background: var(--yellow); }
+    .days-pill.alert { background: var(--red); }
+    .ct-tenant-dates { font-size: 11px; color: var(--text-light); min-width: 160px; text-align: right; }
+    .ct-empty { padding: 12px 18px; font-size: 13px; color: var(--text-light); font-style: italic; }
+
+    @media (max-width: 700px) {
+      .room-grid { grid-template-columns: repeat(2,1fr); }
+      .summary-cards { grid-template-columns: 1fr; }
+      .detail-body { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .room-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Homestay<br>Management</h1>
+    <p>Nhân viên Kinh doanh</p>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">Chức năng</div>
+    <div class="nav-item active" onclick="switchPage('luu-tru')">
+      <i class="ti ti-building"></i> Quản lý Cư trú
+    </div>
+    <div class="nav-item" onclick="switchPage('dat-coc')">
+      <i class="ti ti-receipt"></i> Đặt cọc
+    </div>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="avatar-sm"><i class="ti ti-user"></i></div>
+    <div class="sidebar-footer-info">
+      <p>Nguyễn Nhân Viên</p>
+      <span>Kinh doanh</span>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="header">
+    <span class="header-title" id="headerTitle">Quản lý Lưu trú</span>
+    <span class="header-greeting">Xin chào, <strong>NV_KINHDOANH</strong></span>
+  </header>
+
+  <!-- ── PAGE: LUU TRU ── -->
+  <div class="page active" id="page-luu-tru">
+    <div class="toolbar">
+      <div class="dropdown-wrap">
+        <button class="filter-btn" id="btnTang" onclick="toggleDrop(event,'dropTang')">
+          <i class="ti ti-layers-subtract"></i>
+          Tầng <span id="tangLabel"></span><i class="ti ti-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="dropTang">
+          <div class="dropdown-item" onclick="selectTang(null)">Tất cả tầng</div>
+          <div class="dropdown-item" onclick="selectTang(1)">Tầng 1</div>
+          <div class="dropdown-item" onclick="selectTang(2)">Tầng 2</div>
+          <div class="dropdown-item" onclick="selectTang(3)">Tầng 3</div>
+        </div>
+      </div>
+      <div class="dropdown-wrap">
+        <button class="filter-btn" id="btnLoai" onclick="toggleDrop(event,'dropLoai')">
+          Loại phòng <span id="loaiLabel"></span><i class="ti ti-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="dropLoai">
+          <div class="dropdown-item" onclick="selectLoai(null)">Tất cả</div>
+          <div class="dropdown-item" onclick="selectLoai('KTX Nam')">KTX Nam</div>
+          <div class="dropdown-item" onclick="selectLoai('KTX Nu')">KTX Nữ</div>
+        </div>
+      </div>
+      <div class="ct-stats" id="ctStats"></div>
+    </div>
+
+    <!-- Room accordion list -->
+    <div class="ct-list" id="ctList"></div>
+    <div class="pagination" id="roomPagination"></div>
+  </div>
+
+  <!-- ── PAGE: DAT COC ── -->
+  <div class="page" id="page-dat-coc">
+    <div class="page-header">
+      <h2>Quản lý Đặt cọc</h2>
+      <button class="btn-primary" onclick="openDepositModal()">
+        <i class="ti ti-plus"></i> Thêm đặt cọc
+      </button>
+    </div>
+
+    <div class="summary-cards">
+      <div class="summary-card">
+        <div class="summary-icon blue"><i class="ti ti-receipt"></i></div>
+        <div class="summary-info">
+          <p>Tổng đặt cọc</p>
+          <h3 id="statTotal">0</h3>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon green"><i class="ti ti-check"></i></div>
+        <div class="summary-info">
+          <p>Đã xác nhận</p>
+          <h3 id="statConfirmed">0</h3>
+        </div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-icon yellow"><i class="ti ti-clock"></i></div>
+        <div class="summary-info">
+          <p>Chờ xử lý</p>
+          <h3 id="statPending">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-card">
+      <div class="table-toolbar">
+        <div class="table-search">
+          <i class="ti ti-search"></i>
+          <input type="text" id="depositSearch" placeholder="Tìm theo tên, phòng..." oninput="renderDeposits()">
+        </div>
+        <div class="status-tabs">
+          <button class="status-tab active" onclick="setDepositTab('all',this)">Tất cả</button>
+          <button class="status-tab" onclick="setDepositTab('cho_xu_ly',this)">Chờ xử lý</button>
+          <button class="status-tab" onclick="setDepositTab('da_xac_nhan',this)">Đã xác nhận</button>
+          <button class="status-tab" onclick="setDepositTab('da_huy',this)">Đã huỷ</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Khách hàng</th>
+            <th>Phòng</th>
+            <th>Số tiền cọc</th>
+            <th>Ngày đặt</th>
+            <th>Ngày nhận phòng</th>
+            <th>Trạng thái</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="depositTable"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ROOM DETAIL OVERLAY -->
+<div class="detail-overlay" id="detailOverlay" onclick="closeDetail(event)">
+  <div class="detail-panel" onclick="event.stopPropagation()">
+    <div class="detail-header">
+      <div class="dot" id="detailDot"></div>
+      <h2 id="detailTitle">Phòng</h2>
+      <button class="detail-close" onclick="closeDetailBtn()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="detail-body">
+      <div class="detail-section" id="detailLeft"></div>
+      <div class="detail-section" id="detailRight"></div>
+    </div>
+  </div>
+</div>
+
+<!-- DEPOSIT MODAL -->
+<div class="modal-overlay" id="depositModal" onclick="closeDepositModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <h3 id="depositModalTitle"><i class="ti ti-receipt"></i> Thêm đặt cọc</h3>
+    <div class="field">
+      <label>Họ và tên khách</label>
+      <input type="text" id="dName" placeholder="Nguyễn Văn A">
+    </div>
+    <div class="field">
+      <label>Số điện thoại</label>
+      <input type="text" id="dPhone" placeholder="09xxxxxxxx">
+    </div>
+    <div class="field">
+      <label>Phòng muốn đặt</label>
+      <select id="dRoom">
+        <option value="">-- Chọn phòng --</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Số tiền cọc (đ)</label>
+      <input type="number" id="dAmount" placeholder="500000">
+    </div>
+    <div class="field">
+      <label>Ngày đặt cọc</label>
+      <input type="date" id="dDate">
+    </div>
+    <div class="field">
+      <label>Ngày dự kiến nhận phòng</label>
+      <input type="date" id="dCheckin">
+    </div>
+    <div class="field">
+      <label>Trạng thái</label>
+      <select id="dStatus">
+        <option value="cho_xu_ly">Chờ xử lý</option>
+        <option value="da_xac_nhan">Đã xác nhận</option>
+        <option value="da_huy">Đã huỷ</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('depositModal').classList.remove('open')">Huỷ</button>
+      <button class="btn-save" onclick="saveDeposit()">Lưu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const ROOMS = [
+  { id:"101", tang:1, loai:"KTX Nam", so_giuong:4, gia_phong:6000000, gia_giuong:1600000,
+    beds:[{name:"Giường 1",tenant:"Nguyễn Văn A",status:"thuê"},{name:"Giường 2",tenant:"Trần Văn B",status:"thuê"},{name:"Giường 3",tenant:"Lê Văn C",status:"thuê"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"102", tang:1, loai:"KTX Nam", so_giuong:4, gia_phong:6000000, gia_giuong:1600000,
+    beds:[{name:"Giường 1",tenant:"Phạm Văn D",status:"thuê"},{name:"Giường 2",tenant:"Hoàng Văn E",status:"thuê"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"103", tang:1, loai:"KTX Nam", so_giuong:4, gia_phong:4000000, gia_giuong:1200000,
+    beds:[{name:"Giường 1",tenant:"Ngô Văn F",status:"thuê"},{name:"Giường 2",tenant:"Đỗ Văn G",status:"thuê"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"104", tang:1, loai:"KTX Nam", so_giuong:4, gia_phong:6000000, gia_giuong:1600000,
+    beds:[{name:"Giường 1",tenant:"Vũ Văn H",status:"thuê"},{name:"Giường 2",tenant:"Bùi Văn I",status:"thuê"},{name:"Giường 3",tenant:"Đặng Văn J",status:"thuê"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"105", tang:1, loai:"KTX Nam", so_giuong:4, gia_phong:6000000, gia_giuong:1600000,
+    beds:[{name:"Giường 1",tenant:"",status:"trống"},{name:"Giường 2",tenant:"",status:"trống"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"106", tang:1, loai:"KTX Nam", so_giuong:5, gia_phong:5000000, gia_giuong:1200000,
+    beds:[{name:"Giường 1",tenant:"Lý Văn K",status:"thuê"},{name:"Giường 2",tenant:"Đinh Văn L",status:"thuê"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"},{name:"Giường 5",tenant:"",status:"trống"}]},
+  { id:"201", tang:2, loai:"KTX Nu", so_giuong:4, gia_phong:5000000, gia_giuong:1500000,
+    beds:[{name:"Giường 1",tenant:"Nguyễn Thị A",status:"thuê"},{name:"Giường 2",tenant:"",status:"trống"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"202", tang:2, loai:"KTX Nu", so_giuong:4, gia_phong:5000000, gia_giuong:1500000,
+    beds:[{name:"Giường 1",tenant:"Trần Thị B",status:"thuê"},{name:"Giường 2",tenant:"Lê Thị C",status:"thuê"},{name:"Giường 3",tenant:"",status:"trống"},{name:"Giường 4",tenant:"",status:"trống"}]},
+  { id:"203", tang:2, loai:"KTX Nu", so_giuong:4, gia_phong:5000000, gia_giuong:1500000,
+    beds:[{name:"Giường 1",tenant:"Phạm Thị D",status:"thuê"},{name:"Giường 2",tenant:"Hoàng Thị E",status:"thuê"},{name:"Giường 3",tenant:"Vũ Thị F",status:"thuê"},{name:"Giường 4",tenant:"",status:"trống"}]},
+];
+
+let deposits = [
+  { id:1, name:"Nguyễn Văn X", phone:"0901111111", room:"101", amount:500000, date:"2026-04-01", checkin:"2026-05-01", status:"da_xac_nhan" },
+  { id:2, name:"Trần Thị Y",   phone:"0902222222", room:"105", amount:500000, date:"2026-04-10", checkin:"2026-05-10", status:"cho_xu_ly" },
+  { id:3, name:"Lê Văn Z",     phone:"0903333333", room:"201", amount:300000, date:"2026-04-15", checkin:"2026-05-15", status:"cho_xu_ly" },
+  { id:4, name:"Phạm Thị W",   phone:"0904444444", room:"202", amount:500000, date:"2026-03-20", checkin:"2026-04-20", status:"da_huy" },
+];
+let nextDepId = 5;
+let editDepId = null;
+let activeDepTab = "all";
+
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
+const fmt = n => n.toLocaleString("vi-VN") + "đ";
+const fmtDate = d => { if(!d) return "—"; const [y,m,day]=d.split("-"); return `${day}/${m}/${y}`; };
+const dotClass = { green:"dot-green", yellow:"dot-yellow", red:"dot-red" };
+const statusLabel = { green:"Còn chỗ", yellow:"Gần đầy", red:"Đầy" };
+const depStatusLabel = { cho_xu_ly:"Chờ xử lý", da_xac_nhan:"Đã xác nhận", da_huy:"Đã huỷ" };
+const depStatusBadge = { cho_xu_ly:"badge-yellow", da_xac_nhan:"badge-green", da_huy:"badge-gray" };
+
+function getRoomStatus(room) {
+  const occupied = room.beds.filter(b => b.status === "thuê").length;
+  return occupied >= room.so_giuong ? "red" : occupied >= room.so_giuong - 1 ? "yellow" : "green";
+}
+
+// ─────────────────────────────────────────────
+// NAVIGATION
+// ─────────────────────────────────────────────
+const pageTitles = { "luu-tru": "Quản lý Cư trú", "dat-coc": "Quản lý Đặt cọc" };
+function switchPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.getElementById("page-" + id).classList.add("active");
+  event.currentTarget.classList.add("active");
+  document.getElementById("headerTitle").textContent = pageTitles[id];
+  if (id === "dat-coc") { renderDeposits(); updateStats(); }
+}
+
+// ─────────────────────────────────────────────
+// DROPDOWN LOGIC
+// ─────────────────────────────────────────────
+document.addEventListener("click", () => {
+  document.querySelectorAll(".dropdown-menu").forEach(d => d.classList.remove("open"));
+});
+function toggleDrop(e, id) {
+  e.stopPropagation();
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains("open");
+  document.querySelectorAll(".dropdown-menu").forEach(d => d.classList.remove("open"));
+  if (!wasOpen) el.classList.add("open");
+}
+
+// ─────────────────────────────────────────────
+// ROOM FILTERS
+// ─────────────────────────────────────────────
+// ── CU TRU FILTERS ──
+let activeLoai = null, activeTang = null;
+const PAGE_SIZE = 5;
+let roomPage = 1;
+const today = new Date();
+
+function daysSince(s) { return Math.max(0, Math.floor((today - new Date(s)) / 86400000)); }
+function daysUntil(e) { return Math.floor((new Date(e) - today) / 86400000); }
+
+function selectTang(v) {
+  activeTang = v;
+  document.getElementById("tangLabel").textContent = v ? " · Tầng " + v : "";
+  document.getElementById("btnTang").classList.toggle("active", v !== null);
+  document.querySelectorAll("#dropTang .dropdown-item").forEach(el =>
+    el.classList.toggle("selected", el.textContent.trim() === (v ? "Tầng " + v : "Tất cả tầng")));
+  document.getElementById("dropTang").classList.remove("open");
+  roomPage = 1; filterRooms();
+}
+function selectLoai(v) {
+  activeLoai = v;
+  document.getElementById("loaiLabel").textContent = v ? " · " + v : "";
+  document.getElementById("btnLoai").classList.toggle("active", !!v);
+  document.querySelectorAll("#dropLoai .dropdown-item").forEach(el =>
+    el.classList.toggle("selected", el.textContent.trim() === (v || "Tất cả")));
+  document.getElementById("dropLoai").classList.remove("open");
+  roomPage = 1; filterRooms();
+}
+
+function filterRooms() {
+  const list = ROOMS.filter(r => {
+    const matchTang = activeTang === null || r.tang === activeTang;
+    const matchLoai = !activeLoai || r.loai === activeLoai;
+    return matchTang && matchLoai;
+  });
+  // update stats
+  const totalTenants = list.reduce((s,r) => s + r.beds.filter(b=>b.status==="thuê").length, 0);
+  document.getElementById("ctStats").innerHTML =
+    `<i class="ti ti-users"></i> ${totalTenants} cư trú · ${list.length} phòng`;
+  renderCtList(list);
+}
+
+function renderCtList(list) {
+  const container = document.getElementById("ctList");
+  const total = Math.ceil(list.length / PAGE_SIZE);
+  const page  = list.slice((roomPage-1)*PAGE_SIZE, roomPage*PAGE_SIZE);
+
+  if (page.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="background:white;border-radius:12px;padding:2rem;text-align:center;color:var(--text-light)">Không có phòng nào.</div>';
+    document.getElementById("roomPagination").innerHTML = "";
+    return;
+  }
+
+  container.innerHTML = page.map(r => {
+    const status   = getRoomStatus(r);
+    const occupied = r.beds.filter(b => b.status === "thuê").length;
+    const tenants  = r.beds.filter(b => b.status === "thuê");
+
+    const tenantRows = tenants.length === 0
+      ? `<div class="ct-empty">Chưa có người cư trú</div>`
+      : tenants.map(b => {
+          // use dummy dates since sample data has no dates per bed
+          const start = "2025-01-01", end = "2025-12-31";
+          const stayed    = daysSince(start);
+          const remaining = daysUntil(end);
+          const pillClass = remaining < 0 ? "alert" : remaining < 30 ? "warn" : "";
+          return `
+            <div class="ct-tenant-row">
+              <span class="ct-tenant-bed">${b.name}</span>
+              <span class="ct-tenant-name">${b.tenant}</span>
+              <span class="ct-tenant-days">
+                <span>${stayed} ngày cư trú</span>
+                <span class="days-pill ${pillClass}">
+                  ${remaining < 0 ? "Hết hạn" : remaining + " ngày còn"}
+                </span>
+              </span>
+              <span class="ct-tenant-dates">01/01/2025 → 31/12/2025</span>
+            </div>`;
+        }).join("");
+
+    return `
+      <div class="ct-room-block">
+        <div class="ct-room-header open" onclick="toggleCtRoom(this)">
+          <div class="dot ${dotClass[status]}"></div>
+          <span class="ct-room-name">Phòng ${r.id}
+            <span style="font-weight:400;font-size:12px;color:var(--text-light)"> · ${r.loai} · Tầng ${r.tang}</span>
+          </span>
+          <div class="ct-room-meta">
+            <span><i class="ti ti-users" style="font-size:13px"></i> ${occupied}/${r.so_giuong}</span>
+            <span><i class="ti ti-coin" style="font-size:13px"></i> ${fmt(r.gia_giuong)}/giường</span>
+            <span class="badge badge-${status==='green'?'green':status==='yellow'?'yellow':'red'}">${statusLabel[status]}</span>
+          </div>
+          <i class="ti ti-chevron-down ct-chevron open"></i>
+        </div>
+        <div class="ct-tenant-list open">${tenantRows}</div>
+      </div>`;
+  }).join("");
+
+  renderRoomPagination(total);
+}
+
+function toggleCtRoom(header) {
+  const list    = header.nextElementSibling;
+  const chevron = header.querySelector(".ct-chevron");
+  header.classList.toggle("open");
+  list.classList.toggle("open");
+  chevron.classList.toggle("open");
+}
+
+function renderRoomPagination(total) {
+  const pg = document.getElementById("roomPagination");
+  if (total <= 1) { pg.innerHTML = ""; return; }
+  let btns = [];
+  for (let i = 1; i <= total; i++) {
+    if (i===1||i===total||(i>=roomPage-1&&i<=roomPage+1)) {
+      btns.push(`<button class="page-btn ${i===roomPage?'active':''}" onclick="goRoomPage(${i})">${i}</button>`);
+    } else if (btns[btns.length-1] !== '<span class="page-ellipsis">…</span>') {
+      btns.push('<span class="page-ellipsis">…</span>');
+    }
+  }
+  pg.innerHTML = `
+    <button class="page-btn" onclick="goRoomPage(${roomPage-1})" ${roomPage===1?'disabled':''}><i class="ti ti-chevron-left"></i></button>
+    ${btns.join("")}
+    <button class="page-btn" onclick="goRoomPage(${roomPage+1})" ${roomPage===total?'disabled':''}><i class="ti ti-chevron-right"></i></button>`;
+}
+function goRoomPage(p) {
+  const total = Math.ceil(ROOMS.filter(r =>
+    (activeTang===null||r.tang===activeTang) && (!activeLoai||r.loai===activeLoai)
+  ).length / PAGE_SIZE);
+  if (p<1||p>total) return;
+  roomPage = p; filterRooms();
+}
+
+// ─────────────────────────────────────────────
+// ROOM DETAIL
+// ─────────────────────────────────────────────
+function openDetail(id) {
+  const r = ROOMS.find(x => x.id === id);
+  const status = getRoomStatus(r);
+  const occupied = r.beds.filter(b => b.status === "thuê").length;
+
+  document.getElementById("detailDot").className = "dot " + dotClass[status];
+  document.getElementById("detailTitle").textContent = `Phòng ${r.id} — ${statusLabel[status]}`;
+
+  document.getElementById("detailLeft").innerHTML = `
+    <h3>Thông tin phòng</h3>
+    <div class="detail-row"><span class="detail-label">Loại phòng</span><span class="detail-value">${r.loai}</span></div>
+    <div class="detail-row"><span class="detail-label">Tầng</span><span class="detail-value">${r.tang}</span></div>
+    <div class="detail-row"><span class="detail-label">Số giường</span><span class="detail-value">${r.so_giuong}</span></div>
+    <div class="detail-row"><span class="detail-label">Số người</span><span class="detail-value">${occupied} / ${r.so_giuong}</span></div>
+    <div class="detail-row"><span class="detail-label">Giá nguyên phòng</span><span class="detail-value">${fmt(r.gia_phong)}</span></div>
+    <div class="detail-row"><span class="detail-label">Giá giường</span><span class="detail-value">${fmt(r.gia_giuong)}</span></div>
+    <div class="detail-row"><span class="detail-label">Tình trạng</span><span class="detail-value"><span class="badge badge-${status==='green'?'green':status==='yellow'?'yellow':'red'}">${statusLabel[status]}</span></span></div>
+  `;
+
+  document.getElementById("detailRight").innerHTML = `
+    <h3>Thông tin giường</h3>
+    ${r.beds.map(b => `
+      <div class="bed-card">
+        <div class="bed-card-title">${b.name}</div>
+        <div class="bed-card-row">
+          <span>Người thuê</span>
+          <span style="font-weight:600">${b.tenant || "—"}</span>
+        </div>
+        <div class="bed-card-row">
+          <span>Trạng thái</span>
+          <span><span class="badge ${b.status==='thuê'?'badge-red':'badge-green'}">${b.status}</span></span>
+        </div>
+      </div>`).join("")}
+  `;
+
+  document.getElementById("detailOverlay").classList.add("open");
+}
+function closeDetail(e) { if(e.target===document.getElementById("detailOverlay")) closeDetailBtn(); }
+function closeDetailBtn() { document.getElementById("detailOverlay").classList.remove("open"); }
+
+// ─────────────────────────────────────────────
+// DEPOSITS
+// ─────────────────────────────────────────────
+function updateStats() {
+  document.getElementById("statTotal").textContent = deposits.length;
+  document.getElementById("statConfirmed").textContent = deposits.filter(d => d.status === "da_xac_nhan").length;
+  document.getElementById("statPending").textContent = deposits.filter(d => d.status === "cho_xu_ly").length;
+}
+
+function setDepositTab(tab, el) {
+  activeDepTab = tab;
+  document.querySelectorAll(".status-tab").forEach(t => t.classList.remove("active"));
+  el.classList.add("active");
+  renderDeposits();
+}
+
+function renderDeposits() {
+  const q = document.getElementById("depositSearch").value.toLowerCase().trim();
+  const tbody = document.getElementById("depositTable");
+  let list = deposits.filter(d => {
+    const matchQ = !q || d.name.toLowerCase().includes(q) || d.room.includes(q) || d.phone.includes(q);
+    const matchTab = activeDepTab === "all" || d.status === activeDepTab;
+    return matchQ && matchTab;
+  });
+
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="8" class="empty-table">Không có dữ liệu.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = list.map((d, i) => `
+    <tr>
+      <td>${i+1}</td>
+      <td><strong>${d.name}</strong><br><span style="color:var(--text-light);font-size:11px">${d.phone}</span></td>
+      <td>Phòng ${d.room}</td>
+      <td><strong>${fmt(d.amount)}</strong></td>
+      <td>${fmtDate(d.date)}</td>
+      <td>${fmtDate(d.checkin)}</td>
+      <td><span class="badge ${depStatusBadge[d.status]}">${depStatusLabel[d.status]}</span></td>
+      <td>
+        <button class="action-btn" onclick="openDepositModal(${d.id})" title="Sửa"><i class="ti ti-pencil"></i></button>
+        <button class="action-btn" onclick="deleteDeposit(${d.id})" title="Xoá" style="color:var(--red)"><i class="ti ti-trash"></i></button>
+      </td>
+    </tr>`).join("");
+  updateStats();
+}
+
+function populateRoomSelect() {
+  const sel = document.getElementById("dRoom");
+  sel.innerHTML = '<option value="">-- Chọn phòng --</option>' +
+    ROOMS.map(r => `<option value="${r.id}">Phòng ${r.id} (${r.loai} · Tầng ${r.tang})</option>`).join("");
+}
+
+function openDepositModal(id = null) {
+  editDepId = id;
+  populateRoomSelect();
+  document.getElementById("depositModalTitle").innerHTML = id
+    ? '<i class="ti ti-pencil"></i> Sửa đặt cọc'
+    : '<i class="ti ti-receipt"></i> Thêm đặt cọc';
+
+  if (id) {
+    const d = deposits.find(x => x.id === id);
+    document.getElementById("dName").value    = d.name;
+    document.getElementById("dPhone").value   = d.phone;
+    document.getElementById("dRoom").value    = d.room;
+    document.getElementById("dAmount").value  = d.amount;
+    document.getElementById("dDate").value    = d.date;
+    document.getElementById("dCheckin").value = d.checkin;
+    document.getElementById("dStatus").value  = d.status;
+  } else {
+    ["dName","dPhone","dAmount","dDate","dCheckin"].forEach(f => document.getElementById(f).value = "");
+    document.getElementById("dRoom").value   = "";
+    document.getElementById("dStatus").value = "cho_xu_ly";
+  }
+  document.getElementById("depositModal").classList.add("open");
+}
+
+function closeDepositModal(e) {
+  if (e.target === document.getElementById("depositModal"))
+    document.getElementById("depositModal").classList.remove("open");
+}
+
+function saveDeposit() {
+  const name    = document.getElementById("dName").value.trim();
+  const phone   = document.getElementById("dPhone").value.trim();
+  const room    = document.getElementById("dRoom").value;
+  const amount  = parseInt(document.getElementById("dAmount").value);
+  const date    = document.getElementById("dDate").value;
+  const checkin = document.getElementById("dCheckin").value;
+  const status  = document.getElementById("dStatus").value;
+
+  if (!name || !phone || !room || !amount || !date || !checkin)
+    return alert("Vui lòng điền đầy đủ thông tin!");
+
+  if (editDepId) {
+    const d = deposits.find(x => x.id === editDepId);
+    Object.assign(d, { name, phone, room, amount, date, checkin, status });
+  } else {
+    deposits.push({ id: nextDepId++, name, phone, room, amount, date, checkin, status });
+  }
+
+  document.getElementById("depositModal").classList.remove("open");
+  renderDeposits();
+}
+
+function deleteDeposit(id) {
+  if (!confirm("Xoá đặt cọc này?")) return;
+  deposits = deposits.filter(d => d.id !== id);
+  renderDeposits();
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+filterRooms();
+populateRoomSelect();
+renderDeposits();
+updateStats();
+</script>
+</body>
+</html>
