@@ -29,7 +29,7 @@ export default function Login() {
   const handleQuickLogin = (role) => {
     const credentials = {
       sales: { username: 'sale01', password: '123456' },
-      accountant: { username: 'accountant01', password: '123456' },
+      accountant: { username: 'account01', password: '123456' },
       manager: { username: 'manager01', password: '123456' },
     };
 
