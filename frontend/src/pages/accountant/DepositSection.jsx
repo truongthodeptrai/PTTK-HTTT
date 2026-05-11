@@ -165,7 +165,7 @@ export default function DepositSection() {
                   <tr key={booking.id} className="hover:bg-gray-50 transition">
                     <td className="py-5 px-6 font-medium text-blue-600">{booking.code}</td>
                     <td className="py-5 px-6">{booking.customerName}</td>
-                    <td className="py-5 px-6">{booking.roomId}</td>
+                    <td className="py-5 px-6">{booking.roomName || `P${booking.roomId}`}</td>
                     <td className="py-5 px-6 text-right font-semibold text-blue-600">
                       {formatCurrency(booking.amount)}
                     </td>
