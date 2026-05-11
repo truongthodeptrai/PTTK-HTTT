@@ -1,4 +1,4 @@
-const { sql, getPool } = require('../config/database');
+const { sql, pool } = require('../config/database');
 
 const depositStatusMap = {
   0: 'pending',
@@ -34,15 +34,15 @@ function mapBooking(row) {
     status: depositStatusMap[row.TrangThai] || 'unknown',
     createdAt: row.NgayDatCoc,
     paymentDeadline: row.HanThanhToan,
-    rentalType: row.HinhThucThue,
+    rentalType: rentalTypeMap[row.HinhThucThue],
     bedCount: row.SoGiuongDat,
   };
 }
 
 class BookingModel {
   static async findAll() {
-    const pool = await getPool();
-    const result = await pool.request().query(`
+    const db = await pool;
+    const result = await db.request().query(`
       SELECT dc.MaDatCoc, dc.SoTienCoc, dc.NgayDatCoc, dc.HanThanhToan,
              dc.TrangThai, dc.HinhThucThue, dc.SoGiuongDat,
              dc.MaPhong, p.TenPhong, dc.MaKhachHang, kh.HoTen
@@ -56,8 +56,8 @@ class BookingModel {
   }
 
   static async findById(id) {
-    const pool = await getPool();
-    const result = await pool.request()
+    const db = await pool;
+    const result = await db.request()
       .input('id', sql.Int, id)
       .query(`
         SELECT dc.MaDatCoc, dc.SoTienCoc, dc.NgayDatCoc, dc.HanThanhToan,
@@ -73,8 +73,8 @@ class BookingModel {
   }
 
   static async findByCustomerId(customerId) {
-    const pool = await getPool();
-    const result = await pool.request()
+    const db = await pool;
+    const result = await db.request()
       .input('customerId', sql.Int, customerId)
       .query(`
         SELECT dc.MaDatCoc, dc.SoTienCoc, dc.NgayDatCoc, dc.HanThanhToan,
@@ -91,8 +91,8 @@ class BookingModel {
   }
 
   static async create(booking) {
-    const pool = await getPool();
-    const result = await pool.request()
+    const db = await pool;
+    const result = await db.request()
       .input('amount', sql.Decimal(19, 4), booking.amount)
       .input('paymentDeadline', sql.DateTime, booking.paymentDeadline || booking.deadline)
       .input('status', sql.Int, depositStatusValueMap[booking.status] ?? 0)
@@ -116,8 +116,8 @@ class BookingModel {
   }
 
   static async updateStatus(id, status) {
-    const pool = await getPool();
-    await pool.request()
+    const db = await pool;
+    await db.request()
       .input('id', sql.Int, id)
       .input('status', sql.Int, depositStatusValueMap[status])
       .query(`

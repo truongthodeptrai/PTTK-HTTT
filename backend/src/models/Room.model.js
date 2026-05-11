@@ -1,4 +1,4 @@
-const { sql, getPool } = require('../config/database');
+const { sql, pool } = require('../config/database');
 
 const roomStatusMap = {
   0: 'available',
@@ -35,8 +35,8 @@ function mapRoom(row) {
 
 class RoomModel {
   static async findAll() {
-    const pool = await getPool();
-    const result = await pool.request().query(`
+    const db = await pool;
+    const result = await db.request().query(`
       SELECT p.MaPhong, p.TenPhong, p.GiaNguyenPhong, p.GiaThueMotGiuong,
              p.SoNguoiToiDa, p.SoNguoiConLai, p.TrangThai, p.MaChiNhanh,
              p.MaLoaiPhong, lp.TenLoaiPhong, lp.SoNguoi
@@ -49,8 +49,8 @@ class RoomModel {
   }
 
   static async findAvailable() {
-    const pool = await getPool();
-    const result = await pool.request().query(`
+    const db = await pool;
+    const result = await db.request().query(`
       SELECT p.MaPhong, p.TenPhong, p.GiaNguyenPhong, p.GiaThueMotGiuong,
              p.SoNguoiToiDa, p.SoNguoiConLai, p.TrangThai, p.MaChiNhanh,
              p.MaLoaiPhong, lp.TenLoaiPhong, lp.SoNguoi
@@ -64,7 +64,7 @@ class RoomModel {
   }
 
   static async findById(id) {
-    const pool = await getPool();
+    const db = await pool;
     const result = await pool.request()
       .input('id', sql.Int, id)
       .query(`
@@ -80,8 +80,8 @@ class RoomModel {
   }
 
   static async create(room) {
-    const pool = await getPool();
-    const result = await pool.request()
+    const db = await pool;
+    const result = await db.request()
       .input('name', sql.NVarChar(20), room.code || room.name)
       .input('fullRoomPrice', sql.Decimal(19, 4), room.fullRoomPrice || room.price)
       .input('bedPrice', sql.Decimal(19, 4), room.bedPrice || room.price)
@@ -109,8 +109,8 @@ class RoomModel {
     const current = await this.findById(id);
     if (!current) return null;
 
-    const pool = await getPool();
-    await pool.request()
+    const db = await pool;
+    await db.request()
       .input('id', sql.Int, id)
       .input('name', sql.NVarChar(20), room.code || room.name || current.code)
       .input('fullRoomPrice', sql.Decimal(19, 4), room.fullRoomPrice ?? current.fullRoomPrice)

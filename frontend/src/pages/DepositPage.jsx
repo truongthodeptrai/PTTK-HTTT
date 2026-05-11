@@ -139,7 +139,7 @@ function DepositPage() {
 						) : (
 							dsDaLoc.map((dc) => (
 								<tr key={dc.id} className="hover:bg-blue-50">
-									<td className="border px-2 py-1 font-medium text-blue-600">{dc.code}</td>
+									<td className="border px-2 py-1">{dc.code}</td>
 									<td className="border px-2 py-1">{dc.customerName}</td>
 									<td className="border px-2 py-1">{dc.roomName}</td>
 									<td className="border px-2 py-1 font-semibold">{formatCurrency(dc.amount)}</td>
