@@ -35,12 +35,18 @@ function CustomerPage() {
   const [actionLoading, setActionLoading] = useState(false);
   const navigate = useNavigate();
 
-  // FIX LỖI: Dùng useCallback bọc hàm fetchCustomers và đưa ra ngoài
-  // để cả useEffect và handleDelete đều có thể gọi được nó an toàn.
+
   const fetchCustomers = useCallback(async () => {
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/customers");
+      const token = localStorage.getItem('token');
+      const res = await fetch("http://localhost:5000/api/customers", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
+      });
 
       if (!res.ok) {
         throw new Error(`Lỗi HTTP: ${res.status}`);
@@ -83,8 +89,13 @@ function CustomerPage() {
     
     setActionLoading(true);
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/customers/${id}`, {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        }
       });
       if (res.ok) {
         await fetchCustomers(); // Bây giờ gọi hàm này sẽ không bị lỗi nữa
@@ -259,7 +270,7 @@ function CustomerPage() {
                       <div className="flex items-center justify-center gap-2">
                         {/* Nút Xem chi tiết */}
                         <Link
-                          to={`/customers/${c.MaKhachHang}`}
+                          to={`/sales/customers/${c.MaKhachHang}`}
                           state={{ TrangThaiLuuTru: c.TrangThaiLuuTru }}
                           className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                           title="Xem chi tiết"
@@ -272,7 +283,7 @@ function CustomerPage() {
                         
                         {/* Nút Chỉnh sửa */}
                         <Link
-                          to={`/customers/${c.MaKhachHang}/edit`}
+                          to={`/sales/customers/${c.MaKhachHang}/edit`}
                           className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"
                           title="Chỉnh sửa"
                         >
@@ -306,7 +317,7 @@ function CustomerPage() {
 
       {/* Nút Thêm Khách Hàng (Floating Action Button) */}
       <Link
-        to="/customers/create"
+        to="/sales/customers/create"
         className="fixed bottom-8 right-8 bg-blue-600 text-white px-6 py-3.5 rounded-full shadow-lg shadow-blue-500/30 font-medium hover:bg-blue-700 hover:-translate-y-1 transition-all duration-200 z-40 flex items-center gap-2"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor">
