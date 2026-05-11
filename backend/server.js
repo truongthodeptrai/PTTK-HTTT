@@ -15,6 +15,7 @@ app.use("/api", authRoutes);
 // Khai báo các Routes
 app.use("/api/rooms", require("./src/routes/room.routes"));
 app.use("/api/customers", require("./src/routes/customer.routes"));
+app.use("/api/employees", require("./src/routes/employee.routes"));
 // app.use('/api/deposits', require('./src/routes/datCoc'));
 
 // --- KHỞI CHẠY SERVER ---
