@@ -6,6 +6,8 @@ export default function DepositSection() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     loadBookings();
@@ -46,6 +48,18 @@ export default function DepositSection() {
     return <span className={`px-4 py-1 ${s.bg} ${s.text} rounded-full text-sm font-medium`}>{s.label}</span>;
   };
 
+  const statusFilters = [
+    { value: 'all', label: 'Tất cả' },
+    { value: 'pending', label: 'Chờ xác nhận' },
+    { value: 'approved', label: 'Đã duyệt' },
+    { value: 'completed', label: 'Hoàn thành' },
+    { value: 'rejected', label: 'Từ chối' },
+  ];
+
+  const filteredBookings = statusFilter === 'all'
+    ? bookings
+    : bookings.filter((booking) => booking.status === statusFilter);
+
   const renderLoadingState = () => (
     <div className="flex items-center justify-center h-64">
       <div className="text-center">
@@ -77,9 +91,21 @@ export default function DepositSection() {
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
-        <h2 className="text-xl font-semibold">Danh sách Đặt cọc</h2>
-        <button onClick={() => alert('Chức năng lọc nâng cao')}  
-        className="cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
+        <div>
+          <h2 className="text-xl font-semibold">Danh sách Đặt cọc</h2>
+          <p className="text-sm text-gray-500">
+            Hiển thị {filteredBookings.length}/{bookings.length} đặt cọc
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowFilters((current) => !current)}
+          className={`cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 transition ${
+            showFilters || statusFilter !== 'all'
+              ? 'bg-blue-50 border-blue-300 text-blue-700'
+              : 'hover:bg-gray-50'
+          }`}
+        >
           <i className="fas fa-filter"></i> Lọc
         </button>
       </div>
@@ -87,11 +113,43 @@ export default function DepositSection() {
       {loading ? (
         renderLoadingState()
       ) : (
-        <div className="bg-white rounded-3xl shadow overflow-x-auto">
-          {bookings.length === 0 ? (
-            renderEmptyState('Không có đặt cọc nào')
-          ) : (
-            <table className="min-w-[860px] w-full">
+        <div className="space-y-4">
+          {showFilters && (
+            <div className="bg-white rounded-2xl shadow p-4 flex flex-wrap items-center gap-3">
+              <span className="text-sm font-medium text-gray-600">Trạng thái:</span>
+              {statusFilters.map((filter) => (
+                <button
+                  key={filter.value}
+                  type="button"
+                  onClick={() => setStatusFilter(filter.value)}
+                  className={`cursor-pointer px-4 py-2 rounded-xl text-sm font-medium transition ${
+                    statusFilter === filter.value
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+              {statusFilter !== 'all' && (
+                <button
+                  type="button"
+                  onClick={() => setStatusFilter('all')}
+                  className="cursor-pointer ml-auto text-sm text-blue-600 hover:text-blue-700"
+                >
+                  Xóa lọc
+                </button>
+              )}
+            </div>
+          )}
+
+          <div className="bg-white rounded-3xl shadow overflow-x-auto">
+            {bookings.length === 0 ? (
+              renderEmptyState('Không có đặt cọc nào')
+            ) : filteredBookings.length === 0 ? (
+              renderEmptyState('Không có đặt cọc phù hợp với bộ lọc')
+            ) : (
+              <table className="min-w-[860px] w-full">
               <thead className="bg-gray-50 sticky top-0">
                 <tr>
                   <th className="text-left py-5 px-6 font-semibold">Mã Đặt cọc</th>
@@ -103,7 +161,7 @@ export default function DepositSection() {
                 </tr>
               </thead>
               <tbody className="divide-y text-sm">
-                {bookings.map((booking) => (
+                {filteredBookings.map((booking) => (
                   <tr key={booking.id} className="hover:bg-gray-50 transition">
                     <td className="py-5 px-6 font-medium text-blue-600">{booking.code}</td>
                     <td className="py-5 px-6">{booking.customerName}</td>
@@ -129,8 +187,9 @@ export default function DepositSection() {
                   </tr>
                 ))}
               </tbody>
-            </table>
-          )}
+              </table>
+            )}
+          </div>
         </div>
       )}
     </div>

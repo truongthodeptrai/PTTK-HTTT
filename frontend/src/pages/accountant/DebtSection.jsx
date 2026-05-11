@@ -152,13 +152,18 @@ export default function DebtSection() {
                     <tr key={debt.id} className="hover:bg-gray-50 transition">
                       <td className="py-5 px-6 font-medium">{debt.customerName}</td>
                       <td className="py-5 px-6">
-                        <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                        <span className={`inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1 rounded-full leading-none ${
                           debt.type === 'utilities' 
                             ? 'bg-blue-100 text-blue-700' 
                             : 'bg-red-100 text-red-700'
                         }`}>
-                          {debt.type === 'utilities' ? '💡 Tiền nước' : '⚠️ Phạt'}
+                          <span className="text-[11px] leading-none">
+                          {debt.type === 'utilities' ? '💡' : '⚠️'}
                         </span>
+                        <span className="leading-none">
+                          {debt.type === 'utilities' ? 'Tiền nước' : 'Phạt'}
+                        </span>
+                      </span>
                       </td>
                       <td className="py-5 px-6">{debt.description}</td>
                       <td className="py-5 px-6 text-right font-semibold text-red-600">
