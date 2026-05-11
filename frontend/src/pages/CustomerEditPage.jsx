@@ -14,7 +14,13 @@ export default function CustomerEditPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/customers/${id}`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`http://localhost:5000/api/customers/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
         if (!res.ok) throw new Error("Không tìm thấy khách hàng");
         const data = await res.json();
         // Lọc bỏ các trường dư thừa không cần update
@@ -45,9 +51,13 @@ export default function CustomerEditPage() {
     e.preventDefault();
     setSaving(true);
     try {
+      const token = localStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/customers/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json" 
+        },
         body: JSON.stringify(formData)
       });
       if (res.ok) {

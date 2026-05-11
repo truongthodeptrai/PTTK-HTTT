@@ -14,7 +14,13 @@ function TrangSoDoPhong() {
   useEffect(() => {
     const layDuLieuTuBackend = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/rooms');
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/rooms', {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
         const data = await response.json();
         
         setDanhSachPhong(data);

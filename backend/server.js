@@ -15,7 +15,11 @@ app.use("/api", authRoutes);
 // Khai bao cac Routes
 app.use("/api/rooms", require("./src/routes/room.routes"));
 app.use("/api/customers", require("./src/routes/customer.routes"));
+
+app.use("/api/employees", require("./src/routes/employee.routes"));
+
 app.use("/api/stays", require("./src/routes/stay.routes"));
+
 // app.use('/api/deposits', require('./src/routes/datCoc'));
 
 // --- KHOI CHAY SERVER ---

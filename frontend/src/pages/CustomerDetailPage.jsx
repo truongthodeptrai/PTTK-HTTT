@@ -14,7 +14,13 @@ export default function CustomerDetailPage() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`http://localhost:5000/api/customers/${id}`);
+        const token = localStorage.getItem('token');
+        const res = await fetch(`http://localhost:5000/api/customers/${id}`, {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
         if (!res.ok) throw new Error("Không tìm thấy khách hàng");
         const data = await res.json();
         // Ưu tiên trạng thái truyền qua state nếu có
