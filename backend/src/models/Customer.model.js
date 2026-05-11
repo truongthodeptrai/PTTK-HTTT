@@ -1,5 +1,21 @@
 const { sql, pool } = require("../config/database");
 
+function mapCustomer(row) {
+  if (!row) return null;
+
+  return {
+    id: row.MaKhachHang,
+    code: `KH${String(row.MaKhachHang).padStart(6, '0')}`,
+    name: row.HoTen,
+    cccd: row.CCCD,
+    phone: row.SDT,
+    gender: row.GioiTinh,
+    nationality: row.QuocTich,
+    email: row.Email,
+    createdAt: row.NgayTao,
+  };
+}
+
 class CustomerModel {
   static async getAllCustomersWithStatus() {
     const db = await pool;

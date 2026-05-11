@@ -25,6 +25,12 @@ class AuthController {
       });
     }
   }
+
+  static async getProfile(req, res) {
+    res.json({
+      user: req.user,
+    });
+  }
 }
 
 module.exports = AuthController;
