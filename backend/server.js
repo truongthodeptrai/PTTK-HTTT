@@ -19,6 +19,7 @@ app.use("/api/customers", require("./src/routes/customer.routes"));
 app.use("/api/employees", require("./src/routes/employee.routes"));
 
 app.use("/api/stays", require("./src/routes/stay.routes"));
+app.use("/api/bookings", require("./src/routes/booking.routes"));
 
 // app.use('/api/deposits', require('./src/routes/datCoc'));
 
