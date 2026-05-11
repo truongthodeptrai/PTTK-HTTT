@@ -21,10 +21,6 @@ function formatDate(value) {
   return date.toLocaleDateString("vi-VN");
 }
 
-function getRentalTypeLabel(value) {
-  if (value === null || value === undefined || value === "") return "-";
-  return RENTAL_TYPE_LABELS[value] || String(value);
-}
 
 function TrangQuanLyLuuTru() {
   const [stays, setStays] = useState([]);
@@ -32,43 +28,43 @@ function TrangQuanLyLuuTru() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  //Fetch data từ API
+  // Fetch data tu API
   useEffect(() => {
-    // let isMounted = true;
+    let isMounted = true;
 
-    // async function fetchStays() {
-    //   try {
-    //     setIsLoading(true);
-    //     setError("");
+    async function fetchStays() {
+      try {
+        setIsLoading(true);
+        setError("");
 
-    //     const response = await fetch("http://localhost:5000/api/stays");
-    //     if (!response.ok) {
-    //       throw new Error("Khong the tai danh sach luu tru");
-    //     }
+        const response = await fetch("http://localhost:5000/api/stays");
+        if (!response.ok) {
+          throw new Error("Không thể tải danh sách lưu trú");
+        }
 
-    //     const data = await response.json();
-    //     const stayList = Array.isArray(data) ? data : data.data || [];
+        const data = await response.json();
+        const stayList = Array.isArray(data) ? data : data.data || [];
 
-    //     if (isMounted) {
-    //       setStays(stayList);
-    //     }
-    //   } catch (err) {
-    //     if (isMounted) {
-    //       setError(err.message || "Khong the tai danh sach luu tru");
-    //       setStays([]);
-    //     }
-    //   } finally {
-    //     if (isMounted) {
-    //       setIsLoading(false);
-    //     }
-    //   }
-    // }
+        if (isMounted) {
+          setStays(stayList);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message || "Không thể tải danh sách lưu trú");
+          setStays([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
 
-    // fetchStays();
+    fetchStays();
 
-    // return () => {
-    //   isMounted = false;
-    // };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const filteredList = useMemo(() => {
@@ -89,7 +85,7 @@ function TrangQuanLyLuuTru() {
         STATUS_LABELS[stay.status],
         stay.status,
         stay.bedCount,
-        getRentalTypeLabel(stay.rentalType),
+        RENTAL_TYPE_LABELS[stay.rentalType],
       ]
         .filter(Boolean)
         .some((value) => String(value).toLowerCase().includes(searchText)),
@@ -155,7 +151,7 @@ function TrangQuanLyLuuTru() {
                   <td className="border px-2 py-1">{formatDate(stay.checkOut)}</td>
                   <td className="border px-2 py-1">{STATUS_LABELS[stay.status] || stay.status || "-"}</td>
                   <td className="border px-2 py-1">{stay.bedCount ?? "-"}</td>
-                  <td className="border px-2 py-1">{getRentalTypeLabel(stay.rentalType)}</td>
+                  <td className="border px-2 py-1">{RENTAL_TYPE_LABELS[stay.rentalType] || stay.rentalType || "-"}</td>
                   <td className="border px-2 py-1">
                     <button className="text-blue-600 hover:underline">Xem</button>
                   </td>
@@ -170,3 +166,4 @@ function TrangQuanLyLuuTru() {
 }
 
 export default TrangQuanLyLuuTru;
+

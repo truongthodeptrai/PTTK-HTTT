@@ -30,8 +30,7 @@
     font-size: 16px;
   }
 }
-@tailwind base;
-@tailwind components;
+@import "tailwindcss/preflight";
 @tailwind utilities;
 @media (prefers-color-scheme: dark) {
   :root {
@@ -117,8 +116,6 @@ code {
   background: var(--code-bg);
 }
 
-@import "tailwindcss";
-=======
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -150,9 +147,10 @@ code {
     font-size: 16px;
   }
 }
-@tailwind base;
-@tailwind components;
+@import "tailwindcss/preflight";
 @tailwind utilities;
+
+@import "tailwindcss";
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #9ca3af;

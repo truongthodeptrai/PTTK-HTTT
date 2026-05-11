@@ -2,28 +2,28 @@ import React, { useEffect, useState } from "react";
 
 // Dữ liệu giả lập đặt cọc (có thể thay bằng fetch từ backend)
 const mockDepositList = [
-	{
-		id: 1,
-		customerName: "Nguyễn Văn A",
-		roomId: "101",
-		amount: 2000000,
-		createdAt: "2024-05-01",
-		paymentDeadline: "2024-05-10",
-		status: 0, // 0=Chờ thanh toán, 1=Đã thanh toán, 2=Hủy, 3=Hết hạn
-		rentalType: 1, // 1=Thuê giường, 2=Thuê nguyên phòng
-		bedCount: 2,
-	},
-	{
-		id: 2,
-		customerName: "Trần Thị B",
-		roomId: "102",
-		amount: 3000000,
-		createdAt: "2024-05-03",
-		paymentDeadline: "2024-05-12",
-		paymentStatus: 1,
-		rentalType: 2,
-		bedCount: 0,
-	},
+	// {
+	// 	id: 1,
+	// 	customerName: "Nguyễn Văn A",
+	// 	roomId: "101",
+	// 	amount: 2000000,
+	// 	createdAt: "2024-05-01",
+	// 	paymentDeadline: "2024-05-10",
+	// 	status: 0, // 0=Chờ thanh toán, 1=Đã thanh toán, 2=Hủy, 3=Hết hạn
+	// 	rentalType: 1, // 1=Thuê giường, 2=Thuê nguyên phòng
+	// 	bedCount: 2,
+	// },
+	// {
+	// 	id: 2,
+	// 	customerName: "Trần Thị B",
+	// 	roomId: "102",
+	// 	amount: 3000000,
+	// 	createdAt: "2024-05-03",
+	// 	paymentDeadline: "2024-05-12",
+	// 	paymentStatus: 1,
+	// 	rentalType: 2,
+	// 	bedCount: 0,
+	// },
 ];
 
 const TRANG_THAI_LABELS = {
@@ -47,9 +47,42 @@ function DepositPage() {
 	const [tuKhoa, setTuKhoa] = useState("");
 
 	useEffect(() => {
-		// TODO: Thay bằng fetch từ backend
-		setDsDatCoc(mockDepositList);
-	}, []);
+    let isMounted = true;
+
+    async function fetchStays() {
+      try {
+        setIsLoading(true);
+        setError("");
+
+        const response = await fetch("http://localhost:5000/api/deposits");
+        if (!response.ok) {
+          throw new Error("Không thể tải danh sách lưu trú");
+        }
+
+        const data = await response.json();
+        const stayList = Array.isArray(data) ? data : data.data || [];
+
+        if (isMounted) {
+          setStays(stayList);
+        }
+      } catch (err) {
+        if (isMounted) {
+          setError(err.message || "Không thể tải danh sách lưu trú");
+          setStays([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    fetchStays();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
 	// Lọc theo từ khóa (mã đặt cọc, tên khách, mã phòng)
 	const dsDaLoc = dsDatCoc.filter((dc) => {

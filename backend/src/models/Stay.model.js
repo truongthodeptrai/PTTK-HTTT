@@ -1,10 +1,15 @@
-﻿const { sql, getPool } = require('../config/database');
+﻿const { sql, pool } = require('../config/database');
 
 const stayStatusMap = {
   0: 'pending_checkin',
   1: 'active',
   2: 'completed',
   3: 'cancelled',
+};
+
+const rentalTypeMap = {
+  1: 'bed',
+  2: 'room',
 };
 
 function mapStay(row) {
@@ -19,7 +24,7 @@ function mapStay(row) {
     paymentCycle: row.ChuKyThanhToan,
     cyclePrice: Number(row.GiaMotChuKyThanhToan),
     monthlyFee: Number(row.GiaMotChuKyThanhToan),
-    rentalType: row.HinhThucThue,
+    rentalType: rentalTypeMap[row.HinhThucThue],
     bedCount: row.SoGiuongThue,
     customerId: row.MaKhachHang,
     customerName: row.HoTen,
@@ -34,8 +39,8 @@ function mapStay(row) {
 
 class StayModel {
   static async findAll() {
-    const pool = await getPool();
-    const result = await pool.request().query(`
+    const db = await pool;
+    const result = await db.request().query(`
       SELECT hd.MaHopDong, hd.TrangThai, hd.NgayBatDau, hd.NgayKetThuc,
              hd.ChuKyThanhToan, hd.GiaMotChuKyThanhToan, hd.HinhThucThue,
              hd.SoGiuongThue, hd.MaKhachHang, kh.HoTen, kh.GioiTinh,
@@ -50,8 +55,8 @@ class StayModel {
   }
 
   static async findById(id) {
-    const pool = await getPool();
-    const result = await pool.request()
+    const db = await pool;
+    const result = await db.request()
       .input('id', sql.Int, id)
       .query(`
         SELECT hd.MaHopDong, hd.TrangThai, hd.NgayBatDau, hd.NgayKetThuc,
@@ -69,3 +74,4 @@ class StayModel {
 }
 
 module.exports = StayModel;
+
