@@ -1,4 +1,4 @@
-const { sql, getPool } = require('../config/database');
+﻿const { sql, getPool } = require('../config/database');
 
 const stayStatusMap = {
   0: 'pending_checkin',
@@ -23,6 +23,9 @@ function mapStay(row) {
     bedCount: row.SoGiuongThue,
     customerId: row.MaKhachHang,
     customerName: row.HoTen,
+    gender: row.GioiTinh,
+    nationality: row.QuocTich,
+    idNumber: row.CCCD,
     bookingId: row.MaDatCoc,
     roomId: row.MaPhong,
     roomName: row.TenPhong,
@@ -35,8 +38,8 @@ class StayModel {
     const result = await pool.request().query(`
       SELECT hd.MaHopDong, hd.TrangThai, hd.NgayBatDau, hd.NgayKetThuc,
              hd.ChuKyThanhToan, hd.GiaMotChuKyThanhToan, hd.HinhThucThue,
-             hd.SoGiuongThue, hd.MaKhachHang, kh.HoTen,
-             hd.MaDatCoc, hd.MaPhong, p.TenPhong
+             hd.SoGiuongThue, hd.MaKhachHang, kh.HoTen, kh.GioiTinh,
+             kh.QuocTich, kh.CCCD, hd.MaDatCoc, hd.MaPhong, p.TenPhong
       FROM HopDong hd
       INNER JOIN KhachHang kh ON kh.MaKhachHang = hd.MaKhachHang
       INNER JOIN Phong p ON p.MaPhong = hd.MaPhong
@@ -53,8 +56,8 @@ class StayModel {
       .query(`
         SELECT hd.MaHopDong, hd.TrangThai, hd.NgayBatDau, hd.NgayKetThuc,
                hd.ChuKyThanhToan, hd.GiaMotChuKyThanhToan, hd.HinhThucThue,
-               hd.SoGiuongThue, hd.MaKhachHang, kh.HoTen,
-               hd.MaDatCoc, hd.MaPhong, p.TenPhong
+               hd.SoGiuongThue, hd.MaKhachHang, kh.HoTen, kh.GioiTinh,
+               kh.QuocTich, kh.CCCD, hd.MaDatCoc, hd.MaPhong, p.TenPhong
         FROM HopDong hd
         INNER JOIN KhachHang kh ON kh.MaKhachHang = hd.MaKhachHang
         INNER JOIN Phong p ON p.MaPhong = hd.MaPhong
