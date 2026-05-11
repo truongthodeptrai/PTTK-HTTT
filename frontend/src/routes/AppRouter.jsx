@@ -43,7 +43,7 @@ export default function AppRouter() {
       {/* KHU VỰC CỦA sales (KINH DOANH)              */}
       {/* ========================================== */}
       <Route element={<ProtectedRoute allowedRole="sales" />}>
-        <Route path="/sales" element={<Layout userRole="sales" />}>
+        <Route path="sales" element={<Layout userRole="sales" />}>
           <Route path="customer-management" element={<CustomerPage />} />
           <Route path="customers/create" element={<CustomerCreatePage />} />
           <Route path="customers/:id/edit" element={<CustomerEditPage />} />
@@ -56,7 +56,7 @@ export default function AppRouter() {
       {/* KHU VỰC CỦA ACCOUNTANT (KẾ TOÁN)           */}
       {/* ========================================== */}
       <Route element={<ProtectedRoute allowedRole="accountant" />}>
-        <Route path="/accountant" element={<Layout userRole="accountant" />}>
+        <Route path="accountant" element={<Layout userRole="accountant" />}>
           <Route path="stay-management" element={<StayPage />} />
           <Route path="deposit" element={<DepositPage />} />
         </Route>
@@ -66,7 +66,7 @@ export default function AppRouter() {
       {/* KHU VỰC CỦA MANAGER (QUẢN LÝ)              */}
       {/* ========================================== */}
       <Route element={<ProtectedRoute allowedRole="manager" />}>
-        <Route path="/manager" element={<Layout userRole="manager" />}>
+        <Route path="manager" element={<Layout userRole="manager" />}>
           <Route path="employee-management" element={<EmployeeManagementPage />} />
         </Route>
       </Route>

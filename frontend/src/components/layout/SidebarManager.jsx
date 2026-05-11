@@ -14,7 +14,7 @@ function SidebarManager() {
   const displayName = user.TenNhanVien || "Quản lý";
 
   const menuItems = [
-    { path: '/manager/employee-management', icon: 'fa-users-cog', label: 'Quản lý tài khoản' },
+    { path: 'employee-management', icon: 'fa-users-cog', label: 'Quản lý tài khoản' },
   ];
 
   return (

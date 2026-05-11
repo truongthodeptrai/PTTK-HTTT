@@ -14,10 +14,10 @@ function SidebarAccountant() {
   const displayName = user.TenNhanVien || "Kế toán";
 
   const menuItems = [
-    { path: '/deposit', icon: 'fa-money-bill-wave', label: 'Deposit Management' },
-    { path: '/stay-management', icon: 'fa-file-contract', label: 'Stay Management' },
-    { path: '/ke-toan/thanh-toan', icon: 'fa-hand-holding-usd', label: 'Thanh toán & Hoàn cọc' },
-    { path: '/ke-toan/cong-no', icon: 'fa-exclamation-triangle', label: 'Công nợ & Phạt' },
+    { path: 'deposit', icon: 'fa-money-bill-wave', label: 'Deposit Management' },
+    { path: 'stay-management', icon: 'fa-file-contract', label: 'Stay Management' },
+    // { path: 'thanh-toan-hoang-coc', icon: 'fa-hand-holding-usd', label: 'Thanh toán & Hoàn cọc' },
+    // { path: 'cong-no-va-phat', icon: 'fa-exclamation-triangle', label: 'Công nợ & Phạt' },
   ];
 
   return (

@@ -16,8 +16,8 @@ function SidebarSales() {
   const displayName = user.TenNhanVien || "Nhân viên Sale";
 
   const menuItems = [
-    { path: '/sales/customer-management', icon: 'fa-users', label: 'Customer Management' },
-    { path: '/sales/room', icon: 'fa-bed', label: 'Room/Bed Inquiry' },
+    { path: 'customer-management', icon: 'fa-users', label: 'Customer Management' },
+    { path: 'room', icon: 'fa-bed', label: 'Room/Bed Inquiry' },
   ];
 
   return (

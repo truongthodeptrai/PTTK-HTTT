@@ -14,7 +14,7 @@ const paymentStatusValueMap = {
   due: 3
 };
 
-const paymentMethodValueMap = {
+const paymentMethodMap = {
   1: cash,
   2: transfer
 };
@@ -30,7 +30,7 @@ function mapPayment(row) {
     customerId: row.MaKhachHang,
     customerName: row.HoTen,
     amount: Number(row.SoTien),
-    method: row.PhuongThuc,
+    method: paymentMethodMap[row.PhuongThuc],
     type: row.LoaiThanhToan,
     paymentPeriod: row.KyThanhToan,
     status: paymentStatusMap[row.TrangThai] || 'unknown',
