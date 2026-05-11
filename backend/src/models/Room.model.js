@@ -1,18 +1,11 @@
-// backend/src/models/Phong.js
-const mongoose = require("mongoose");
+const { sql, pool } = require("../config/database");
 
-const PhongSchema = new mongoose.Schema({
-  maPhong: { type: String, required: true },
-  giaNguyenPhong: String,
-  giaGiuong: String,
-  loaiPhong: String,
-  soNguoiHienTai: Number,
-  soNguoiToiDa: Number,
-  trangThai: {
-    type: String,
-    enum: ["green", "red", "yellow"], // Tương ứng với màu sắc trên giao diện
-    default: "green",
-  },
-});
+class RoomModel {
+  static async getAllRooms() {
+    const db = await pool;
+    const result = await db.request().query("SELECT * FROM Phong");
+    return result.recordset;
+  }
+}
 
-module.exports = mongoose.model("Phong", PhongSchema);
+module.exports = RoomModel;

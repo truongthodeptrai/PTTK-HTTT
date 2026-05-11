@@ -13,8 +13,10 @@ app.use(express.json()); // Để server hiểu được dữ liệu JSON từ F
 // mongoose.connect(process.env.MONGO_URI).then(() => console.log("DB Connected"));
 
 // Khai báo các Routes
-app.use("/api/phong", require("./src/routes/room.routes"));
-// app.use('/api/dat-coc', require('./src/routes/datCoc'));
+app.use("/api/rooms", require("./src/routes/room.routes"));
+
+app.use("/api/customers", require("./src/routes/customer.routes"));
+// app.use('/api/deposits', require('./src/routes/datCoc'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -14,7 +14,7 @@ function TrangSoDoPhong() {
   useEffect(() => {
     const layDuLieuTuBackend = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/phong');
+        const response = await fetch('http://localhost:5000/api/rooms');
         const data = await response.json();
         
         setDanhSachPhong(data);
@@ -29,23 +29,26 @@ function TrangSoDoPhong() {
 
   // Logic lọc dữ liệu đa trường
   const danhSachDaLoc = danhSachPhong.filter((phong) => {
-    // Lọc theo từ khóa mã phòng
-    if (!phong.maPhong.toLowerCase().includes(tuKhoa.toLowerCase())) return false;
+    // Lọc theo từ khóa mã phòng hoặc tên phòng
+    if (
+      !phong.TenPhong.toLowerCase().includes(tuKhoa.toLowerCase()) &&
+      !(phong.MaPhong + '').includes(tuKhoa)
+    ) return false;
 
-    // Lọc theo loại phòng
-    if (loaiPhong && phong.loaiPhong !== loaiPhong) return false;
+    // Lọc theo loại phòng (theo MaLoaiPhong hoặc có thể fetch thêm tên loại phòng nếu cần)
+    if (loaiPhong && String(phong.MaLoaiPhong) !== loaiPhong) return false;
 
-    // Lọc theo tiêu chí tình trạng (con trống/đã đầy)
+    // Lọc theo tiêu chí tình trạng (trạng thái)
     if (tieuChi) {
-      if (tieuChi === 'conTrong' && !(phong.soNguoiHienTai < phong.soNguoiToiDa)) return false;
-      if (tieuChi === 'daDay' && !(phong.soNguoiHienTai >= phong.soNguoiToiDa)) return false;
-      if (tieuChi === 'giaThap' && !(Number(phong.giaNguyenPhong.replace(/\D/g, '')) <= 5000000)) return false;
-      if (tieuChi === 'giaCao' && !(Number(phong.giaNguyenPhong.replace(/\D/g, '')) > 5000000)) return false;
+      if (tieuChi === 'conTrong' && phong.TrangThai !== 0) return false;
+      if (tieuChi === 'daDay' && phong.TrangThai !== 1) return false;
+      if (tieuChi === 'giaThap' && !(Number(phong.GiaNguyenPhong) <= 5000000)) return false;
+      if (tieuChi === 'giaCao' && !(Number(phong.GiaNguyenPhong) > 5000000)) return false;
     }
 
     // Lọc theo mức giá
     if (mucGia) {
-      const gia = Number(phong.giaNguyenPhong.replace(/\D/g, ''));
+      const gia = Number(phong.GiaNguyenPhong);
       if (mucGia === 'duoi5tr' && !(gia <= 5000000)) return false;
       if (mucGia === '5-6tr' && !(gia > 5000000 && gia <= 6000000)) return false;
       if (mucGia === 'tren6tr' && !(gia > 6000000)) return false;
@@ -130,16 +133,19 @@ function TrangSoDoPhong() {
       </div>
       <div style={styles.gridContainer}>
         {danhSachHienTai.map((phong) => (
-          <div key={phong._id} style={styles.card}>
+          <div key={phong.MaPhong} style={styles.card}>
             <div style={styles.cardHeader}>
-              <div style={{ ...styles.statusDot, backgroundColor: phong.trangThai }}></div>
-              <strong>{phong.maPhong}</strong>
+              <div style={{ ...styles.statusDot, backgroundColor: phong.TrangThai === 0 ? '#4caf50' : phong.TrangThai === 1 ? '#f44336' : '#ffeb3b' }}></div>
+              <strong>{phong.TenPhong}</strong>
             </div>
             <div style={styles.cardContent}>
-              <p>Giá nguyên phòng: <span style={{ fontWeight: 600 }}>{phong.giaNguyenPhong}</span></p>
-              <p>Giá giường: <span style={{ fontWeight: 600 }}>{phong.giaGiuong}</span></p>
-              <p>Loại phòng: <span style={{ fontWeight: 600 }}>{phong.loaiPhong}</span></p>
-              <p>Số người: <span style={{ fontWeight: 600 }}>{phong.soNguoiHienTai}/{phong.soNguoiToiDa}</span></p>
+              <p>Giá nguyên phòng: <span style={{ fontWeight: 600 }}>{Number(phong.GiaNguyenPhong).toLocaleString('vi-VN')} đ</span></p>
+              <p>Giá giường: <span style={{ fontWeight: 600 }}>{Number(phong.GiaThueMotGiuong).toLocaleString('vi-VN')} đ</span></p>
+              <p>Số người tối đa: <span style={{ fontWeight: 600 }}>{phong.SoNguoiToiDa}</span></p>
+              <p>Số người còn lại: <span style={{ fontWeight: 600 }}>{phong.SoNguoiConLai}</span></p>
+              <p>Trạng thái: <span style={{ fontWeight: 600 }}>
+                {phong.TrangThai === 0 ? 'Trống' : phong.TrangThai === 1 ? 'Đã đầy' : 'Bảo trì'}
+              </span></p>
             </div>
           </div>
         ))}
@@ -153,18 +159,37 @@ function TrangSoDoPhong() {
           >
             &lt;
           </button>
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i + 1}
-              style={{
-                ...styles.pageButton,
-                ...(page === i + 1 ? styles.pageButtonActive : {})
-              }}
-              onClick={() => handlePageChange(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
+          {/* Hiển thị tối đa 5 nút số trang, có ... nếu nhiều trang */}
+          {(() => {
+            const pages = [];
+            if (totalPages <= 5) {
+              for (let i = 1; i <= totalPages; i++) {
+                pages.push(i);
+              }
+            } else {
+              if (page <= 3) {
+                pages.push(1, 2, 3, 4, '...', totalPages);
+              } else if (page >= totalPages - 2) {
+                pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+              } else {
+                pages.push(1, '...', page - 1, page, page + 1, '...', totalPages);
+              }
+            }
+            return pages.map((p, idx) =>
+              p === '...'
+                ? <span key={"ellipsis-" + idx} style={{ padding: '0 8px', color: '#888', fontWeight: 600 }}>...</span>
+                : <button
+                    key={p}
+                    style={{
+                      ...styles.pageButton,
+                      ...(page === p ? styles.pageButtonActive : {})
+                    }}
+                    onClick={() => handlePageChange(p)}
+                  >
+                    {p}
+                  </button>
+            );
+          })()}
           <button
             style={{ ...styles.pageButton, ...(page === totalPages ? styles.pageButtonDisabled : {}) }}
             onClick={() => handlePageChange(page + 1)}

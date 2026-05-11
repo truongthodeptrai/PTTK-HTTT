@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 function SidebarAccountant() {
   // Đưa data menu vào mảng để dễ quản lý
   const menuItems = [
-    { path: '/ke-toan/dat-coc', icon: 'fa-money-bill-wave', label: 'Quản lý Đặt cọc' },
-    { path: '/ke-toan/luu-tru', icon: 'fa-file-contract', label: 'Quản lý Lưu trú' },
+    { path: '/deposit', icon: 'fa-money-bill-wave', label: 'Deposit Management' },
+    { path: '/stay-management', icon: 'fa-file-contract', label: 'Stay Management' },
     { path: '/ke-toan/thanh-toan', icon: 'fa-hand-holding-usd', label: 'Thanh toán & Hoàn cọc' },
     { path: '/ke-toan/cong-no', icon: 'fa-exclamation-triangle', label: 'Công nợ & Phạt' },
   ];

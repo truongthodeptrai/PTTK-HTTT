@@ -4,8 +4,8 @@ import { NavLink } from 'react-router-dom';
 function SidebarSales() {
   // Đưa data menu của Kinh Doanh vào mảng
   const menuItems = [
-    { path: '/khach-hang', icon: 'fa-users', label: 'Quản lý Khách hàng' },
-    { path: '/tra-cuu-phong', icon: 'fa-bed', label: 'Tra cứu Phòng/Giường' },
+    { path: '/customer-management', icon: 'fa-users', label: 'Customer Management' },
+    { path: '/room', icon: 'fa-bed', label: 'Room/Bed Inquiry' },
   ];
 
   return (
@@ -48,7 +48,6 @@ function SidebarSales() {
           </div>
           <div>
             <div className="font-medium">Nguyễn Văn Sale</div>
-            <div className="text-xs text-green-600">Đang online</div>
           </div>
         </div>
       </div>
