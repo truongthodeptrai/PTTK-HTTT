@@ -82,9 +82,9 @@ export default function PaymentSection() {
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center mb-6">
         <h2 className="text-xl font-semibold">Thanh toán & Hoàn cọc</h2>
-        <button className="cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
+        {/* <button className="cursor-pointer px-5 py-3 border rounded-2xl flex items-center gap-2 hover:bg-gray-50 transition">
           <i className="fas fa-plus"></i> Tạo thanh toán
-        </button>
+        </button> */}
       </div>
 
       {loading ? (
@@ -149,11 +149,11 @@ export default function PaymentSection() {
                 <tbody className="divide-y text-sm">
                   {payments.map((payment) => (
                     <tr key={payment.id} className="hover:bg-gray-50 transition">
-                      <td className="py-5 px-6 font-medium">{payment.bookingCode || `PT${payment.id}`}</td>
+                      <td className="py-5 px-6 font-medium">{payment.bookingCode || `TP${payment.id}`}</td>
                       <td className="py-5 px-6">{payment.customerName || `Khách ${payment.customerId}`}</td>
                       <td className="py-5 px-6">
                         <span className="text-xs font-medium bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-                          {payment.type === 'deposit' ? '🏠 Đặt cọc' : '💰 Khác'}
+                          {payment.type === 'DAT_COC' ? '🏠 Đặt cọc' : '💰 Tiền phòng'}
                         </span>
                       </td>
                       <td className="py-5 px-6 text-right font-semibold">
