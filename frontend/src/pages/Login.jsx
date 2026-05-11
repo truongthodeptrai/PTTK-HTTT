@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import thêm useNavigate
 import axios from "axios";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -7,6 +8,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  const navigate = useNavigate(); // Khai báo hook điều hướng
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -23,21 +26,24 @@ function Login() {
       // Backend trả về: { token, user: { MaNhanVien, TenNhanVien, VaiTro, ... } }
       const { token, user } = response.data;
 
-      // Lưu vào LocalStorage
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
+      // Đổi sang dùng sessionStorage thay vì localStorage để bảo mật hơn
+      sessionStorage.setItem("token", token);
+      sessionStorage.setItem("user", JSON.stringify(user));
 
-      // Điều hướng dựa trên VaiTro (Lưu ý: VaiTro trong DB có thể viết hoa/thường khác nhau)
+      // Điều hướng dựa trên VaiTro
       const role = user.VaiTro?.toLowerCase();
 
-      if (role === "sales" || role === "nhân viên bán hàng") {
-        window.location.href = "/sales";
+      // Sử dụng navigate và trỏ thẳng vào các trang con để tránh lỗi màn hình trắng
+      if (role === "sale" || role === "sales" || role === "nhân viên bán hàng") {
+        navigate("/sales/customer-management");
       } else if (role === "accountant" || role === "kế toán") {
-        window.location.href = "/accountant";
+        navigate("/accountant/stay-management");
       } else if (role === "manager" || role === "quản lý") {
-        window.location.href = "/manager";
+        navigate("/manager/employee-management");
       } else {
-        window.location.href = "/dashboard"; // Trang mặc định
+        // Nếu role không khớp, có thể đẩy về một trang báo lỗi hoặc đẩy ra form login lại
+        sessionStorage.clear();
+        setMessage("Tài khoản của bạn không có quyền truy cập hợp lệ.");
       }
     } catch (err) {
       // Lấy message lỗi từ tầng Business/Service trả về
