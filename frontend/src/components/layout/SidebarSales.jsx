@@ -1,11 +1,23 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function SidebarSales() {
-  // Đưa data menu của Kinh Doanh vào mảng
+  const navigate = useNavigate();
+
+  // Hàm xử lý đăng xuất
+  const handleLogout = () => {
+    sessionStorage.clear(); // Xóa phiên đăng nhập
+    navigate('/'); // Đẩy về trang chủ (Login)
+  };
+
+  // Lấy tên thật của nhân viên từ Session
+  const userStr = sessionStorage.getItem('user');
+  const user = userStr ? JSON.parse(userStr) : {};
+  const displayName = user.TenNhanVien || "Nhân viên Sale";
+
   const menuItems = [
-    { path: '/customer-management', icon: 'fa-users', label: 'Customer Management' },
-    { path: '/room', icon: 'fa-bed', label: 'Room/Bed Inquiry' },
+    { path: '/sales/customer-management', icon: 'fa-users', label: 'Customer Management' },
+    { path: '/sales/room', icon: 'fa-bed', label: 'Room/Bed Inquiry' },
   ];
 
   return (
@@ -28,8 +40,8 @@ function SidebarSales() {
             className={({ isActive }) =>
               `flex items-center gap-3 px-5 py-4 rounded-2xl transition-colors ${
                 isActive
-                  ? 'bg-blue-50 text-blue-800 border-l-4 border-blue-500' // Trạng thái đang chọn
-                  : 'text-gray-700 hover:bg-gray-100' // Trạng thái bình thường
+                  ? 'bg-blue-50 text-blue-800 border-l-4 border-blue-500'
+                  : 'text-gray-700 hover:bg-gray-100'
               }`
             }
           >
@@ -39,17 +51,25 @@ function SidebarSales() {
         ))}
       </div>
 
-      {/* User Info */}
-      <div className="p-4 border-t">
+      {/* User Info & Logout */}
+      <div className="p-4 border-t space-y-3">
         <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-2xl">
-          {/* Avatar màu xanh dương cho Sale theo thiết kế gốc */}
           <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
             NV
           </div>
-          <div>
-            <div className="font-medium">Nguyễn Văn Sale</div>
+          <div className="flex-1 overflow-hidden">
+            <div className="font-medium text-sm text-gray-800 truncate">{displayName}</div>
           </div>
         </div>
+        
+        {/* Nút Đăng xuất */}
+        <button 
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl transition-colors font-medium text-sm border border-red-100"
+        >
+          <i className="fas fa-sign-out-alt"></i>
+          Đăng xuất
+        </button>
       </div>
     </div>
   );
