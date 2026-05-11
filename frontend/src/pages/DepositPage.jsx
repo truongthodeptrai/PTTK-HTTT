@@ -42,6 +42,15 @@ function formatCurrency(num) {
 	return num.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 }
 
+function formatDate(value) {
+  if (!value) return "-";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+
+  return date.toLocaleDateString("vi-VN");
+}
+
 function DepositPage() {
 	const [dsDatCoc, setDsDatCoc] = useState([]);
 	const [tuKhoa, setTuKhoa] = useState("");
@@ -146,8 +155,8 @@ function DepositPage() {
 									<td className="border px-2 py-1">{dc.code}</td>
 									<td className="border px-2 py-1">{dc.customerName}</td>
 									<td className="border px-2 py-1">{dc.roomName}</td>
-									<td className="border px-2 py-1">{dc.checkIn}</td>
-									<td className="border px-2 py-1">{dc.checkOut}</td>
+									<td className="border px-2 py-1">{formatDate(dc.checkIn)}</td>
+									<td className="border px-2 py-1">{formatDate(dc.checkOut)}</td>
 									<td className="border px-2 py-1">{TRANG_THAI_LABELS[dc.status]}</td>
 									<td className="border px-2 py-1">{HINH_THUC_LABELS[dc.rentalType]}</td>
 									<td className="border px-2 py-1">{dc.bedCount || "-"}</td>
