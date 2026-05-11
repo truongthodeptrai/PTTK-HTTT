@@ -14,6 +14,12 @@ const depositStatusValueMap = {
   expired: 3,
 };
 
+const rentalTypeMap = {
+  1: 'bed',
+  2: 'room',
+};
+
+
 function mapBooking(row) {
   if (!row) return null;
 

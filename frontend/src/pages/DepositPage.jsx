@@ -3,36 +3,40 @@ import React, { useEffect, useState } from "react";
 // Dữ liệu giả lập đặt cọc (có thể thay bằng fetch từ backend)
 const mockDepositList = [
 	{
-		maDatCoc: 1,
-		tenKhachHang: "Nguyễn Văn A",
-		maPhong: "101",
-		soTienCoc: 2000000,
-		ngayDatCoc: "2024-05-01",
-		hanThanhToan: "2024-05-10",
-		trangThai: 0, // 0=Chờ thanh toán, 1=Đã thanh toán, 2=Hủy, 3=Hết hạn
-		hinhThucThue: 1, // 1=Thuê giường, 2=Thuê nguyên phòng
-		soGiuongDat: 2,
+		id: 1,
+		customerName: "Nguyễn Văn A",
+		roomId: "101",
+		amount: 2000000,
+		createdAt: "2024-05-01",
+		paymentDeadline: "2024-05-10",
+		status: 0, // 0=Chờ thanh toán, 1=Đã thanh toán, 2=Hủy, 3=Hết hạn
+		rentalType: 1, // 1=Thuê giường, 2=Thuê nguyên phòng
+		bedCount: 2,
 	},
 	{
-		maDatCoc: 2,
-		tenKhachHang: "Trần Thị B",
-		maPhong: "102",
-		soTienCoc: 3000000,
-		ngayDatCoc: "2024-05-03",
-		hanThanhToan: "2024-05-12",
-		trangThai: 1,
-		hinhThucThue: 2,
-		soGiuongDat: 0,
+		id: 2,
+		customerName: "Trần Thị B",
+		roomId: "102",
+		amount: 3000000,
+		createdAt: "2024-05-03",
+		paymentDeadline: "2024-05-12",
+		paymentStatus: 1,
+		rentalType: 2,
+		bedCount: 0,
 	},
 ];
 
-const TRANG_THAI_LABELS = [
-	"Chờ thanh toán",
-	"Đã thanh toán",
-	"Hủy",
-	"Hết hạn",
-];
-const HINH_THUC_LABELS = ["", "Thuê giường", "Thuê nguyên phòng"];
+const TRANG_THAI_LABELS = {
+	pending_checkin: "Chờ nhận phòng",
+	active: "Đang ở",
+	completed: "Đã thanh lý",
+	cancelled: "Đã huỷ"
+};
+
+const HINH_THUC_LABELS = {
+	  bed: "Theo giường",
+  	  room: "Nguyên phòng",
+}
 
 function formatCurrency(num) {
 	return num.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
@@ -51,9 +55,9 @@ function DepositPage() {
 	const dsDaLoc = dsDatCoc.filter((dc) => {
 		const keyword = tuKhoa.toLowerCase();
 		return (
-			dc.maDatCoc.toString().includes(keyword) ||
-			dc.tenKhachHang.toLowerCase().includes(keyword) ||
-			dc.maPhong.toLowerCase().includes(keyword)
+			dc.id.toString().includes(keyword) ||
+			dc.customerName.toLowerCase().includes(keyword) ||
+			dc.roomId.toLowerCase().includes(keyword)
 		);
 	});
 
@@ -92,15 +96,15 @@ function DepositPage() {
 						) : (
 							dsDaLoc.map((dc) => (
 								<tr key={dc.maDatCoc} className="hover:bg-blue-50">
-									<td className="border px-2 py-1">{dc.maDatCoc}</td>
-									<td className="border px-2 py-1">{dc.tenKhachHang}</td>
-									<td className="border px-2 py-1">{dc.maPhong}</td>
-									<td className="border px-2 py-1">{formatCurrency(dc.soTienCoc)}</td>
-									<td className="border px-2 py-1">{dc.ngayDatCoc}</td>
-									<td className="border px-2 py-1">{dc.hanThanhToan}</td>
-									<td className="border px-2 py-1">{TRANG_THAI_LABELS[dc.trangThai]}</td>
-									<td className="border px-2 py-1">{HINH_THUC_LABELS[dc.hinhThucThue]}</td>
-									<td className="border px-2 py-1">{dc.soGiuongDat}</td>
+									<td className="border px-2 py-1">{dc.id}</td>
+									<td className="border px-2 py-1">{dc.customerName}</td>
+									<td className="border px-2 py-1">{dc.roomId}</td>
+									<td className="border px-2 py-1">{formatCurrency(dc.amount)}</td>
+									<td className="border px-2 py-1">{dc.createdAt}</td>
+									<td className="border px-2 py-1">{dc.paymentDeadline}</td>
+									<td className="border px-2 py-1">{TRANG_THAI_LABELS[dc.status]}</td>
+									<td className="border px-2 py-1">{HINH_THUC_LABELS[dc.rentalType]}</td>
+									<td className="border px-2 py-1">{dc.bedCount}</td>
 									<td className="border px-2 py-1">
 										<button className="text-blue-600 hover:underline">Xem</button>
 									</td>

@@ -3,16 +3,20 @@ const { sql, getPool } = require('../config/database');
 const paymentStatusMap = {
   0: 'pending',
   1: 'completed',
+  2: 'cancelled',
+  3: 'due'
 };
 
 const paymentStatusValueMap = {
   pending: 0,
   completed: 1,
+  cancelled: 2,
+  due: 3
 };
 
 const paymentMethodValueMap = {
-  cash: 1,
-  transfer: 2,
+  1: cash,
+  2: transfer
 };
 
 function mapPayment(row) {
