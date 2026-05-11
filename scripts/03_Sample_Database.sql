@@ -27,7 +27,7 @@ GO
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'sale01',
     @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
-    @MaNhanVien = 1
+    @MaNhanVien = 3
 GO
 -- Accountant
 EXEC SP_TaoTaiKhoan
@@ -39,7 +39,7 @@ GO
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'manager01',
     @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
-    @MaNhanVien = 3
+    @MaNhanVien = 1
 GO
 GO
 
@@ -162,12 +162,6 @@ VALUES
 (N'Bùi Thanh Tùng','079300000008','0910000008','Nam',N'Việt Nam','tung08@gmail.com'),
 (N'Phan Minh Khang','079300000009','0910000009','Nam',N'Việt Nam','khang09@gmail.com'),
 (N'Đỗ Anh Tú','079300000010','0910000010','Nam',N'Việt Nam','tu10@gmail.com')
-GO
-
--- Dữ liệu yêu cầu thuê
-EXEC SP_TaoYeuCauThue 2500000, '2026-06-01', 1, 12, 1, 3, 1
-
-EXEC SP_TaoYeuCauThue 12000000, '2026-06-05', 2, 12, 4, 1, 2
 GO
 
 -- Dữ liệu đặt cọc

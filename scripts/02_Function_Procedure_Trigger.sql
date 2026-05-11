@@ -167,44 +167,6 @@ BEGIN
 END
 GO
 
--- Procedure tạo yêu cầu thuê
-CREATE PROCEDURE SP_TaoYeuCauThue
-(
-    @MucGia DECIMAL(19,4),
-    @ThoiGianDuKien DATE,
-    @HinhThucThue INT,
-    @ThoiHanThue INT,
-    @SoLuongNguoi INT,
-    @MaLoaiPhong INT,
-    @MaKhachHang INT
-)
-AS
-BEGIN
-
-    INSERT INTO YeuCau
-    (
-        MucGia,
-        ThoiGianDuKien,
-        HinhThucThue,
-        ThoiHanThue,
-        SoLuongNguoi,
-        MaLoaiPhong,
-        MaKhachHang
-    )
-    VALUES
-    (
-        @MucGia,
-        @ThoiGianDuKien,
-        @HinhThucThue,
-        @ThoiHanThue,
-        @SoLuongNguoi,
-        @MaLoaiPhong,
-        @MaKhachHang
-    )
-
-END
-GO
-
 -- Function tính tiền cọc
 CREATE FUNCTION FN_TinhTienCoc
 (
