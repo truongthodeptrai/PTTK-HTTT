@@ -164,12 +164,6 @@ VALUES
 (N'Đỗ Anh Tú','079300000010','0910000010','Nam',N'Việt Nam','tu10@gmail.com')
 GO
 
--- Dữ liệu yêu cầu thuê
-EXEC SP_TaoYeuCauThue 2500000, '2026-06-01', 1, 12, 1, 3, 1
-
-EXEC SP_TaoYeuCauThue 12000000, '2026-06-05', 2, 12, 4, 1, 2
-GO
-
 -- Dữ liệu đặt cọc
 EXEC SP_DatCoc 1,1,1,1
 EXEC SP_DatCoc 2,2,2,4
