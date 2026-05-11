@@ -1,50 +1,51 @@
-const AccountModel = require('../models/account.model');
+const TaiKhoanDB = require('../repository/TaiKhoanDB');
+const NhanVienDB = require('../repository/NhanVienDB');
 const jwt = require('jsonwebtoken');
-const hashPassword = require('../utils/hashPassword');
 const comparePassword = require('../utils/comparePassword');
+const hashPassword = require('../utils/hashPassword');
 
 class AuthService {
-    static async register(username, password, MaNhanVien) {
-        const hashedPassword = await hashPassword(password);
-        await AccountModel.createAccount(username, hashedPassword, MaNhanVien);
-        return { message: 'Tạo tài khoản thành công' };
-    }
-
     static async login(username, password) {
-        const account = await AccountModel.findByUsername(username);
+        // 1. Lấy dữ liệu tài khoản từ tầng Data
+        const accountData = await TaiKhoanDB.findAccountByUsername(username);
         
-        if (!account) {
-            throw { status: 401, message: 'Sai tài khoản' };
+        if (!accountData) {
+            throw { status: 401, message: 'Tài khoản không tồn tại' };
         }
 
-        const isMatch = await comparePassword(password, account.MatKhauHash);
-        
+        // 2. Kiểm tra mật khẩu
+        const isMatch = await comparePassword(password, accountData.MatKhauHash);
         if (!isMatch) {
-            throw { status: 401, message: 'Sai mật khẩu' };
+            throw { status: 401, message: 'Mật khẩu không chính xác' };
         }
 
+        // 3. Lấy thông tin chi tiết nhân viên
+        const employeeData = await NhanVienDB.findEmployeeByUserName(username);
+
+        // 4. Tạo mã Token
         const token = jwt.sign(
             {
-                MaTaiKhoan: account.MaTaiKhoan,
-                TenTaiKhoan: account.TenTaiKhoan,
-                MaNhanVien: account.MaNhanVien,
-                TenNhanVien: account.TenNhanVien,
-                VaiTro: account.VaiTro
+                id: accountData.MaTaiKhoan,
+                role: employeeData?.VaiTro,
+                name: employeeData?.TenNhanVien
             },
             process.env.JWT_SECRET,
             { expiresIn: '1d' }
         );
 
-        return {
-            token,
+        return { 
+            token, 
             user: {
-                MaTaiKhoan: account.MaTaiKhoan,
-                TenTaiKhoan: account.TenTaiKhoan,
-                MaNhanVien: account.MaNhanVien,
-                TenNhanVien: account.TenNhanVien,
-                VaiTro: account.VaiTro
-            }
-        };
+                MaNhanVien: employeeData.MaNhanVien,
+                TenNhanVien: employeeData.TenNhanVien,
+                VaiTro: employeeData.VaiTro 
+            } 
+    };
+    }
+
+    static async register(username, password, MaNhanVien) {
+        const hashedPassword = await hashPassword(password);
+        return await TaiKhoanDB.save(username, hashedPassword, MaNhanVien);
     }
 }
 

@@ -2,21 +2,24 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+const authRoutes = require('./src/routes/auth.routes'); 
+
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(express.json()); // Để server hiểu được dữ liệu JSON từ Frontend gửi lên
+// --- TẦNG MIDDLEWARE ---
+app.use(cors()); 
+app.use(express.json()); 
 
-// Kết nối Database (Tạm thời để đây, sau này chuyển vào src/config)
-// const mongoose = require('mongoose');
-// mongoose.connect(process.env.MONGO_URI).then(() => console.log("DB Connected"));
+app.use('/api', authRoutes);
 
-// Khai báo các Routes
+// Route cho Phòng
 app.use("/api/phong", require("./src/routes/room.routes"));
-// app.use('/api/dat-coc', require('./src/routes/datCoc'));
 
+// --- KHỞI CHẠY SERVER ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
+  console.log(`=========================================`);
   console.log(`Server đang chạy tại port: ${PORT}`);
+  console.log(`Endpoint Login: POST http://localhost:${PORT}/api/login`);
+  console.log(`=========================================`);
 });
