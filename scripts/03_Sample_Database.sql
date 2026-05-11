@@ -27,7 +27,7 @@ GO
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'sale01',
     @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
-    @MaNhanVien = 1
+    @MaNhanVien = 3
 GO
 -- Accountant
 EXEC SP_TaoTaiKhoan
@@ -39,7 +39,7 @@ GO
 EXEC SP_TaoTaiKhoan
     @TenTaiKhoan = 'manager01',
     @MatKhauHash = '$2b$10$dYklYvsvszSpRbMRZy4JP.6QMgPzMhIHCDQQm485b07pL4VH387SC',
-    @MaNhanVien = 3
+    @MaNhanVien = 1
 GO
 GO
 
