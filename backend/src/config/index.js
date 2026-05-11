@@ -1,4 +1,7 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(__dirname, '../../.env'),
+});
 
 module.exports = {
   port: process.env.PORT || 5000,
@@ -12,7 +15,7 @@ module.exports = {
     database: process.env.DB_NAME,
     options: {
       encrypt: false,
-      trustServerCertificate: true,
+      trustServerCertificate: true
     },
   },
 };
