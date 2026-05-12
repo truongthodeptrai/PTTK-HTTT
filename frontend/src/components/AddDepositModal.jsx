@@ -29,7 +29,14 @@ function AddDepositModal({ isOpen, onClose, onSuccess }) {
       const response = await fetch("http://localhost:5000/api/customers");
       if (response.ok) {
         const data = await response.json();
-        setCustomers(Array.isArray(data) ? data : data.data || []);
+        const customerList = Array.isArray(data) ? data : data.data || [];
+        // Map database columns to standard property names
+        const mapped = customerList.map(c => ({
+          id: c.MaKhachHang || c.id,
+          name: c.HoTen || c.name,
+          hoTen: c.HoTen // Keep for fallback
+        }));
+        setCustomers(mapped);
       }
     } catch (err) {
       console.error("Failed to load customers:", err);
@@ -41,7 +48,14 @@ function AddDepositModal({ isOpen, onClose, onSuccess }) {
       const response = await fetch("http://localhost:5000/api/rooms");
       if (response.ok) {
         const data = await response.json();
-        setRooms(Array.isArray(data) ? data : data.data || []);
+        const roomList = Array.isArray(data) ? data : data.data || [];
+        // Map database columns to standard property names
+        const mapped = roomList.map(r => ({
+          id: r.MaPhong || r.id,
+          name: r.TenPhong || r.name,
+          tenPhong: r.TenPhong // Keep for fallback
+        }));
+        setRooms(mapped);
       }
     } catch (err) {
       console.error("Failed to load rooms:", err);
