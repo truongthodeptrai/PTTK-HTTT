@@ -97,41 +97,12 @@ CREATE TABLE KhachHang
 );
 GO
 
--- Yêu cầu
-CREATE TABLE YeuCau
-(
-    MaYeuCau INT IDENTITY(1,1) PRIMARY KEY,
-    MucGia DECIMAL(19,4) NOT NULL,
-    ThoiGianDuKien DATE NOT NULL,
-    HinhThucThue INT NOT NULL CHECK(HinhThucThue IN (1,2)),
-    ThoiHanThue INT NOT NULL,
-    SoLuongNguoi INT NOT NULL,
-    TrangThaiXetDuyet INT DEFAULT 0 CHECK(TrangThaiXetDuyet IN (0,1,2)), -- 0 = Chờ duyệt, 1 = Đã duyệt, 2 = Từ chối
-    MaLoaiPhong INT NOT NULL,
-    MaKhachHang INT NOT NULL,
-
-    FOREIGN KEY(MaLoaiPhong) REFERENCES LoaiPhong(MaLoaiPhong),
-    FOREIGN KEY(MaKhachHang) REFERENCES KhachHang(MaKhachHang)
-);
-GO
-
 -- Dịch vụ
 CREATE TABLE DichVu
 (
     MaDichVu INT IDENTITY(1,1) PRIMARY KEY,
     TenDichVu NVARCHAR(200) NOT NULL,
     PhiDichVu DECIMAL(19,4) NOT NULL
-);
-GO
-
--- YeuCau_DichVu
-CREATE TABLE YeuCau_DichVu
-(
-    MaYeuCau INT NOT NULL,
-    MaDichVu INT NOT NULL,
-    PRIMARY KEY(MaYeuCau, MaDichVu),
-    FOREIGN KEY(MaYeuCau) REFERENCES YeuCau(MaYeuCau),
-    FOREIGN KEY(MaDichVu) REFERENCES DichVu(MaDichVu)
 );
 GO
 
