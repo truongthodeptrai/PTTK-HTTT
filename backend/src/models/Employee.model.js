@@ -134,8 +134,8 @@ class EmployeeModel {
   }
 
   static async findByUsername(username) {
-    const pool = await getPool();
-    const result = await pool
+    const db = await pool;
+    const result = await db
       .request()
       .input("username", sql.NVarChar(100), username).query(`
         SELECT tk.MaTaiKhoan, tk.TenTaiKhoan, tk.MatKhauHash,
@@ -148,12 +148,12 @@ class EmployeeModel {
         WHERE tk.TenTaiKhoan = @username
       `);
 
-    return mapUser(result.recordset[0]);
+    return result.recordset[0] || null;
   }
 
   static async findById(id) {
-    const pool = await getPool();
-    const result = await pool.request().input("id", sql.Int, id).query(`
+    const db = await pool;
+    const result = await db.request().input("id", sql.Int, id).query(`
         SELECT tk.MaTaiKhoan, tk.TenTaiKhoan, tk.MatKhauHash,
                nv.MaNhanVien, nv.TenNhanVien, nv.CCCD, nv.Luong,
                nv.VaiTro, nv.SDT, nv.ChiTieu, nv.NgayNhanChuc,
@@ -164,7 +164,7 @@ class EmployeeModel {
         WHERE nv.MaNhanVien = @id
       `);
 
-    return mapUser(result.recordset[0]);
+    return result.recordset[0] || null;
   }
 }
 

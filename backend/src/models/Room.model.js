@@ -45,7 +45,7 @@ class RoomModel {
       ORDER BY p.MaPhong DESC
     `);
 
-    return result.recordset.map(mapRoom);
+    return result.recordset;
   }
 
   static async findAvailable() {
