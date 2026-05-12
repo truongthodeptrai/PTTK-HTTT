@@ -17,7 +17,7 @@ export default function EmployeeManagementPage() {
     const fetchEmployees = async () => {
       try {
         setLoading(true);
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const res = await fetch('http://localhost:5000/api/employees', {
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -62,7 +62,7 @@ export default function EmployeeManagementPage() {
     }
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await fetch('http://localhost:5000/api/employees', {
         method: 'POST',
         headers: { 
@@ -120,7 +120,7 @@ export default function EmployeeManagementPage() {
     if (!result.isConfirmed) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/employees/${empId}/toggle-status`, {
         method: 'PUT',
         headers: { 
@@ -172,7 +172,7 @@ export default function EmployeeManagementPage() {
     if (!result.isConfirmed) return;
 
     try {
-      const token = localStorage.getItem('token');
+      const token = sessionStorage.getItem('token');
       const res = await fetch(`http://localhost:5000/api/employees/${empId}/reset-password`, {
         method: 'PUT',
         headers: { 
